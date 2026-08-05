@@ -74,7 +74,7 @@ body.shake .wrap{animation:hitShake .32s cubic-bezier(.3,.9,.3,1)}
   16%{opacity:1;transform:scale(1.05);filter:blur(0)}28%{transform:scale(1)}
   78%{opacity:1}100%{opacity:0;transform:scale(1.07)}}
 
-.wrap{position:relative;z-index:2;max-width:440px;margin:0 auto;height:100svh;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;
+.wrap{position:relative;z-index:2;max-width:440px;margin:0 auto;height:calc(100svh - env(safe-area-inset-top));overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;
   padding:14px 14px calc(20px + env(safe-area-inset-bottom))}
 .screen{display:none;flex-direction:column;gap:12px;animation:scrIn .35s ease}
 .screen.on{display:flex}
@@ -351,7 +351,7 @@ body.scanning .key:not(.fn):not(.exec){color:var(--amb);border-color:rgba(255,19
 .nameinput.bad{border-color:var(--foe)}
 
 /* ── 開機動畫：真人影片全螢幕播放 ── */
-#scrBoot{justify-content:flex-end;align-items:center;min-height:100svh;padding-bottom:9vh;position:relative;z-index:2}
+#scrBoot{justify-content:flex-end;align-items:center;min-height:calc(100svh - env(safe-area-inset-top));padding-bottom:9vh;position:relative;z-index:2}
 .boot-skip{opacity:.7;background:rgba(7,3,17,.55);padding:8px 18px;border-radius:20px;
   border:1px solid rgba(150,150,220,.25);backdrop-filter:blur(3px)}
 /* 開機載入進度：真正由影片播放進度（currentTime/duration）即時算出，
