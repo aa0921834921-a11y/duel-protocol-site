@@ -4462,6 +4462,12 @@ async function onAuthSuccess(user){
 function isNativeApp(){
   return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
 }
+/* 判斷目前是不是手機瀏覽器（不是原生 App）。手機瀏覽器上彈窗登入（signInWithPopup）
+   常常不穩定（尤其 iOS Safari／已加入主畫面的狀態），改用整頁跳轉（signInWithRedirect）
+   穩定很多，跳轉回來後由 checkRedirectLogin() 接手完成登入。 */
+function isMobileWeb(){
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
+}
 async function loginWithProvider(kind){
   loginSetErr('#loginErr','');
   loginBusyToggle(true);
@@ -4478,11 +4484,30 @@ async function loginWithProvider(kind){
       return;
     }
     const auth=await ensureAuthReady();
+    if(isMobileWeb()){
+      /* 整頁跳轉去 Google 登入，這個函式呼叫完頁面就會離開，
+         不會走到下面的 onAuthSuccess()，回來後交給 checkRedirectLogin() 處理。 */
+      await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+      return;
+    }
     const cred=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     await onAuthSuccess(cred.user);
   }catch(e){
     loginSetErr('#loginErr', (e&&e.message)||'登入失敗，請稍後再試。');
   }finally{ loginBusyToggle(false); }
+}
+/* 從 Google 整頁跳轉登入回來後，接手把登入結果走完剩下流程。
+   一定要在頁面一開始就呼叫（不能等使用者點按鈕），因為跳轉回來時使用者還沒做任何動作。 */
+async function checkRedirectLogin(){
+  if(!isMobileWeb() || isNativeApp()) return;
+  try{
+    const auth=await ensureAuthReady();
+    const result=await auth.getRedirectResult();
+    if(result && result.user){ await onAuthSuccess(result.user); }
+  }catch(e){
+    /* 沒有待處理的跳轉登入時，Firebase 也可能丟一些無害的例外，安靜略過即可，
+       不要在使用者根本沒登入的情況下彈出錯誤訊息。 */
+  }
 }
 let LOGIN_FORM_MODE='signup';   // 'signup' ｜ 'login'
 function loginFormRenderMode(){
@@ -4811,6 +4836,7 @@ function applyTheme(key){
 mountEye('#titleEye',wallet.equip,'t0','none');
 paintWallet(); paintAcct();
 cloudInit();
+checkRedirectLogin();
 mountEye('#eyebox','l0','bt');
 mountEye('#introEye','l0','iv');
 const eyebox=$('#eyebox');
