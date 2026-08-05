@@ -29,7 +29,10 @@
 html{height:100%;overflow:hidden;overscroll-behavior:none}
 body{margin:0;height:100svh;overflow:hidden;overscroll-behavior:none;background:var(--bg);color:var(--ink);
   font-family:var(--tc);-webkit-font-smoothing:antialiased;overflow-x:hidden;touch-action:manipulation;
-  transition:background .6s}
+  transition:background .6s;
+  /* viewport-fit=cover 讓網頁延伸到瀏海／狀態列那塊安全區域，
+     不手動補這個上方留白的話，畫面內容會直接貼到最頂端、被瀏海／狀態列蓋住一截。 */
+  padding-top:env(safe-area-inset-top)}
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;transition:background 1s;
   background:radial-gradient(80% 46% at 78% -6%,color-mix(in srgb,var(--foe) 21%,transparent),transparent 62%),
     radial-gradient(70% 40% at 12% 6%,color-mix(in srgb,var(--foe2) 12%,transparent),transparent 60%),
@@ -2409,6 +2412,8 @@ body[data-phase="scrBoot"] #bootScene{display:block}
         <span>使用 Google 登入</span>
       </button>
       <button class="bigbtn alt" id="btnLoginEmail">✉️　使用 Email 註冊 / 登入</button>
+      <button class="tool" id="btnLoginGuest" style="width:100%;margin-top:10px">👤　先玩玩看（訪客模式）</button>
+      <p class="desc" style="font-size:10.5px;opacity:.7;margin-top:6px">訪客模式的進度只存在這台裝置，清除瀏覽器資料或換裝置會遺失，之後仍可在「設定」裡補綁帳號。</p>
       <div class="createerr" id="loginErr" role="alert" aria-live="polite"></div>
     </div>
   </section>
@@ -4424,7 +4429,7 @@ function ensureAuthReady(){
 }
 function loginSetErr(sel,msg){ const e=$(sel); if(e) e.textContent=msg||''; }
 function loginBusyToggle(busy){
-  ['#btnLoginGoogle','#btnLoginEmail','#btnLoginFormGo','#btnLoginVerifyCheck','#btnLoginVerifyResend']
+  ['#btnLoginGoogle','#btnLoginEmail','#btnLoginGuest','#btnLoginFormGo','#btnLoginVerifyCheck','#btnLoginVerifyResend']
     .forEach(sel=>{ const b=$(sel); if(b) b.disabled=busy; });
 }
 /* 登入／註冊成功的共同出口：記住帳號，還沒取暱稱的話進角色建立，否則直接進標題。
@@ -4448,7 +4453,7 @@ async function cloudBind(user){
 }
 async function onAuthSuccess(user){
   LS.set('uid',user.uid);
-  LS.set('authProvider',(user.providerData&&user.providerData[0]&&user.providerData[0].providerId)||'password');
+  LS.set('authProvider', user.isAnonymous ? 'anonymous' : ((user.providerData&&user.providerData[0]&&user.providerData[0].providerId)||'password'));
   LS.set('authEmail',user.email||'');
   if(USE_FB){ try{ await cloudBind(user); }catch(e){} }
   const hasName=!!((LS.get('name','')||'').trim());
@@ -4486,7 +4491,11 @@ async function loginWithProvider(kind){
     const auth=await ensureAuthReady();
     if(isMobileWeb()){
       /* 整頁跳轉去 Google 登入，這個函式呼叫完頁面就會離開，
-         不會走到下面的 onAuthSuccess()，回來後交給 checkRedirectLogin() 處理。 */
+         不會走到下面的 onAuthSuccess()，回來後交給 checkRedirectLogin() 處理。
+         iOS「加入主畫面」的獨立模式有時候不會真的重新整理頁面、而是把畫面凍結，
+         導致這個 await 永遠不會被真正解開、按鈕卡在鎖定狀態——加一個保險的逾時，
+         幾秒後強制把按鈕解鎖，讓使用者至少能重新操作，不會整個卡死。 */
+      setTimeout(()=>loginBusyToggle(false), 4000);
       await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
       return;
     }
@@ -4498,6 +4507,20 @@ async function loginWithProvider(kind){
 }
 /* 從 Google 整頁跳轉登入回來後，接手把登入結果走完剩下流程。
    一定要在頁面一開始就呼叫（不能等使用者點按鈕），因為跳轉回來時使用者還沒做任何動作。 */
+/* 訪客模式：直接沿用頁面載入時 cloudInit() 已經建立好的匿名帳號（Firebase Anonymous Auth），
+   不用另外選登入方式，最快能進遊戲。之後想要換裝置不遺失進度，可以在「設定」裡再補綁 Email／Google。 */
+async function loginAsGuest(){
+  loginSetErr('#loginErr','');
+  loginBusyToggle(true);
+  try{
+    const auth=await ensureAuthReady();
+    let user=auth.currentUser;
+    if(!user){ const cred=await auth.signInAnonymously(); user=cred.user; }
+    await onAuthSuccess(user);
+  }catch(e){
+    loginSetErr('#loginErr', (e&&e.message)||'訪客登入失敗，請稍後再試。');
+  }finally{ loginBusyToggle(false); }
+}
 async function checkRedirectLogin(){
   if(!isMobileWeb() || isNativeApp()) return;
   try{
@@ -4505,8 +4528,11 @@ async function checkRedirectLogin(){
     const result=await auth.getRedirectResult();
     if(result && result.user){ await onAuthSuccess(result.user); }
   }catch(e){
-    /* 沒有待處理的跳轉登入時，Firebase 也可能丟一些無害的例外，安靜略過即可，
-       不要在使用者根本沒登入的情況下彈出錯誤訊息。 */
+    /* auth/no-auth-event 這類代表「本來就沒有待處理的跳轉登入」，是正常情況，安靜略過；
+       其他真正的錯誤才顯示出來，方便玩家/自己排查問題，不要整個吞掉看不見。 */
+    if(e && e.code && e.code!=='auth/no-auth-event'){
+      loginSetErr('#loginErr', '登入時發生問題：'+(e.message||e.code));
+    }
   }
 }
 let LOGIN_FORM_MODE='signup';   // 'signup' ｜ 'login'
@@ -4529,9 +4555,10 @@ function pwIssue(pw,pw2){
   return '';
 }
 (function initLoginScreens(){
-  const btnG=$('#btnLoginGoogle'), btnE=$('#btnLoginEmail');
+  const btnG=$('#btnLoginGoogle'), btnE=$('#btnLoginEmail'), btnGuest=$('#btnLoginGuest');
   if(!btnG) return;
   btnG.onclick=()=>loginWithProvider('google');
+  if(btnGuest) btnGuest.onclick=loginAsGuest;
   btnE.onclick=()=>{
     LOGIN_FORM_MODE='signup'; loginFormRenderMode(); loginSetErr('#loginFormErr','');
     $('#loginFormEmail').value=''; $('#loginFormPw').value=''; $('#loginFormPw2').value='';
@@ -5482,6 +5509,7 @@ function showSettings(){
   let acctLabel='本機存檔（尚未登入雲端帳號）';
   if(uid){
     if(provider==='google.com') acctLabel='已登入　Google 帳號'+(email?'　'+email:'');
+    else if(provider==='anonymous') acctLabel='訪客模式（進度只存在這台裝置）';
     else acctLabel='已登入　Email 帳號'+(email?'　'+email:'');
   }
   const vol=LS.get('volume',90);
