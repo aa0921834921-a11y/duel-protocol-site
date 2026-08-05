@@ -26,8 +26,9 @@
   --tc:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%;overflow:hidden;overscroll-behavior:none}
+html{height:100%;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;width:100%}
 body{margin:0;height:100svh;overflow:hidden;overscroll-behavior:none;background:var(--bg);color:var(--ink);
+  position:fixed;inset:0;width:100%;
   font-family:var(--tc);-webkit-font-smoothing:antialiased;overflow-x:hidden;touch-action:manipulation;
   transition:background .6s;
   /* viewport-fit=cover 讓網頁延伸到瀏海／狀態列那塊安全區域，
