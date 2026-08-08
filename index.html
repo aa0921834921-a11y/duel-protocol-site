@@ -251,7 +251,7 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .turnmsg{font-weight:700;font-size:13px;letter-spacing:2px;white-space:nowrap}
 
 .battlelog{padding:10px 13px 11px}
-.log{margin-top:7px;max-height:142px;overflow-y:auto;font-family:var(--mono);font-size:13px;line-height:1.45;
+.log{margin-top:7px;max-height:196px;overflow-y:auto;font-family:var(--mono);font-size:14px;line-height:1.55;
   scrollbar-width:thin;scrollbar-color:rgba(160,160,255,.35) transparent}
 .log::-webkit-scrollbar{width:4px}
 .log::-webkit-scrollbar-thumb{background:rgba(160,160,255,.35);border-radius:2px}
@@ -280,8 +280,8 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .pvinfo{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:1px;text-align:right}
 .pvinfo b{color:var(--pc,#28E6C8);font-family:var(--en)}
 .entry{display:flex;justify-content:center;gap:10px;margin-bottom:10px}
-.cell{width:46px;height:53px;border-radius:10px;display:grid;place-items:center;
-  font-family:var(--en);font-weight:800;font-size:22px;color:var(--me);
+.cell{width:46px;height:53px;border-radius:10px;display:grid;place-items:center;position:relative;
+  font-family:var(--en);font-weight:800;font-size:22px;color:var(--me);user-select:none;-webkit-user-select:none;
   background:rgba(10,20,26,.85);border:1px solid rgba(40,230,200,.28);transition:.15s}
 .cell.on{border-color:rgba(40,230,200,.65);text-shadow:0 0 14px rgba(40,230,200,.8);
   box-shadow:0 0 16px rgba(40,230,200,.16);animation:cIn .18s ease}
@@ -289,13 +289,19 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .cell.next::after{content:"";width:16px;height:2px;background:var(--me);box-shadow:0 0 9px var(--me);
   position:relative;top:14px;animation:caret 1s steps(2) infinite}
 @keyframes caret{50%{opacity:0}}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.key{height:50px;border-radius:11px;cursor:pointer;user-select:none;
-  font-family:var(--en);font-weight:700;font-size:19px;color:#C9FFF5;
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.key{height:42px;border-radius:10px;cursor:pointer;user-select:none;-webkit-user-select:none;
+  font-family:var(--en);font-weight:700;font-size:16.5px;color:#C9FFF5;position:relative;
   background:linear-gradient(180deg,rgba(40,230,200,.13),rgba(40,230,200,.04));
-  border:1px solid rgba(40,230,200,.24);transition:transform .06s,opacity .25s,box-shadow .15s}
+  border:1px solid rgba(40,230,200,.24);transition:transform .06s,opacity .25s,box-shadow .15s,background .15s,border-color .15s}
 .key:active{transform:scale(.92);box-shadow:0 0 20px rgba(40,230,200,.35)}
 .key.used{opacity:.18;pointer-events:none}
+.key.note-out{background:linear-gradient(180deg,rgba(255,59,87,.24),rgba(255,59,87,.06));
+  border-color:rgba(255,59,87,.55);color:#FFD3DB;opacity:.5;text-decoration:line-through;cursor:not-allowed}
+.key.note-out:active{opacity:.6}
+.key.note-in{background:linear-gradient(180deg,rgba(255,215,94,.32),rgba(255,215,94,.08));
+  border-color:rgba(255,215,94,.75);color:#FFF3D2;box-shadow:0 0 12px rgba(255,215,94,.35)}
+.key.note-out.used,.key.note-in.used{opacity:.18;text-decoration:none;box-shadow:none}
 .key.fn{color:var(--dim);font-size:21px;background:rgba(150,150,230,.07);border-color:var(--line)}
 .key.exec{font-family:var(--tc);font-weight:700;font-size:16px;letter-spacing:4px;color:#fff;
   background:linear-gradient(rgba(10,16,24,.92),rgba(10,16,24,.92)) padding-box,
@@ -329,6 +335,16 @@ body.scanning .key:not(.fn):not(.exec){color:var(--amb);border-color:rgba(255,19
 .pvtint .key.exec{background:linear-gradient(rgba(10,16,24,.92),rgba(10,16,24,.92)) padding-box,
   linear-gradient(92deg,var(--pc,#28E6C8),rgba(255,255,255,.25)) border-box;
   box-shadow:0 0 20px color-mix(in srgb,var(--pc,#28E6C8) 30%,transparent)}
+.pvtint .key.note-out:not(.fn):not(.exec){background:linear-gradient(180deg,rgba(255,59,87,.24),rgba(255,59,87,.06));
+  border-color:rgba(255,59,87,.55);color:#FFD3DB;opacity:.5;text-decoration:line-through}
+.pvtint .key.note-in:not(.fn):not(.exec){background:linear-gradient(180deg,rgba(255,215,94,.32),rgba(255,215,94,.08));
+  border-color:rgba(255,215,94,.75);color:#FFF3D2;box-shadow:0 0 12px rgba(255,215,94,.35)}
+
+/* 已鎖定（確定位置）的輸入格：金色標示，長按格子可切換鎖定 */
+.cell.pinned{border-color:var(--gold);color:var(--gold);
+  box-shadow:0 0 12px rgba(255,215,94,.4),inset 0 0 0 1px rgba(255,215,94,.28)}
+.cell.pinned::before{content:"🔒";position:absolute;top:-8px;right:-5px;font-size:9px;line-height:1;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))}
 
 .nameinput{width:100%;margin:4px 0 10px;padding:11px;border-radius:10px;text-align:center;
   font-family:var(--tc);font-weight:700;font-size:15.5px;letter-spacing:2px;color:var(--ink);
@@ -2129,7 +2145,7 @@ body[data-phase="scrBoot"] #bootScene{display:block}
 .lchip{font-size:11.5px;letter-spacing:1px;padding:5px 11px;border-radius:20px;
   border:1px solid rgba(70,255,158,.4);color:var(--grn);background:rgba(70,255,158,.07)}
 
-@media (max-height:800px){.log{max-height:106px}.key{height:46px}.eyebox{width:80px}}
+@media (max-height:800px){.log{max-height:150px}.key{height:38px}.eyebox{width:80px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 /* ══════════════════════════════════════════════════════════
    新版場景化首頁（hv2- 前綴，避免跟既有 .topbar／.card 等 class 撞名）
@@ -4785,7 +4801,8 @@ function grantCampaign(level,stars){
 }
 let lastReward=null;
 let cfg=null, curLevel=0;
-let myCode=[], foeCode=[], setupBuf=[], entry=[], lastCode=null;
+let myCode=[], foeCode=[], setupBuf=[], entry=[null,null,null,null], lastCode=null;
+let entryPin=[false,false,false,false], entryNotes=makeNotes();
 let aiCands=[], myCandCount=5040, myHistory=[], scanInfo=[];
 let round=1, over=false, lock=false, scanLeft=2, scanMode=false;
 let startT=0, timer=null, heartIv=null, lastTauntRound=-2;
@@ -5053,25 +5070,92 @@ function levelFlash(name,sub){
 }
 
 /* ================= 鍵盤工廠 ================= */
-function buildPad(el,onDigitFn,onBackFn,onExecFn,execLabel){
+/* 長按數字鍵可以在「一般／確定不在密碼中／確定在密碼中」三態間循環標記，
+   純筆記用途、不會被當成輸入；notes 是外部傳入、可持續存在的 10 格陣列。
+   長按輸入格（cell）則可把已經打上去的數字「釘住」，之後每回合會自動幫你
+   填回同一個位置，不用重打——這兩個都是靠 pointerdown 計時做 long-press 判斷，
+   同時攔截後續的 click，避免長按完又順便觸發一次一般點擊輸入。 */
+const LONGPRESS_MS=430, LONGPRESS_TOL=12;
+function makeNotes(){ return new Array(10).fill('none'); }
+function cycleNote(notes,d){
+  notes[d] = notes[d]==='none' ? 'out' : notes[d]==='out' ? 'in' : 'none';
+  return notes[d];
+}
+function paintNotes(pad,notes){
+  if(!pad||!notes) return;
+  pad.querySelectorAll('.key[data-d]').forEach(k=>{
+    const d=+k.dataset.d;
+    k.classList.toggle('note-out',notes[d]==='out');
+    k.classList.toggle('note-in',notes[d]==='in');
+  });
+}
+function bindLongPress(el,onLong,onTap){
+  let timer=null, fired=false, sx=0, sy=0;
+  const clear=()=>{ if(timer){ clearTimeout(timer); timer=null; } };
+  el.addEventListener('pointerdown',e=>{
+    if(el.disabled) return;
+    fired=false; sx=e.clientX; sy=e.clientY;
+    timer=setTimeout(()=>{ fired=true; onLong(); },LONGPRESS_MS);
+  });
+  el.addEventListener('pointermove',e=>{
+    if(Math.abs(e.clientX-sx)>LONGPRESS_TOL||Math.abs(e.clientY-sy)>LONGPRESS_TOL) clear();
+  });
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>el.addEventListener(ev,clear));
+  el.addEventListener('click',e=>{
+    if(fired){ fired=false; e.preventDefault(); e.stopPropagation(); return; }
+    if(onTap) onTap();
+  });
+}
+function buildPad(el,onDigitFn,onBackFn,onExecFn,execLabel,notes){
   el.innerHTML='';
   ['1','2','3','4','5','6','7','8','9','back','0','exec'].forEach(k=>{
     const b=document.createElement('button');
     if(k==='back'){ b.className='key fn'; b.textContent='⌫'; b.onclick=onBackFn; }
     else if(k==='exec'){ b.className='key exec'; b.disabled=true; b.innerHTML=execLabel; b.onclick=onExecFn; }
-    else { b.className='key'; b.dataset.d=k; b.textContent=k; b.onclick=()=>onDigitFn(+k); }
+    else {
+      b.className='key'; b.dataset.d=k; b.textContent=k;
+      if(notes){
+        bindLongPress(b,
+          ()=>{ cycleNote(notes,+k); paintNotes(el,notes); vib(14); sBack(); },
+          /* 標成「確定不在密碼中」的數字，單點要真的擋掉輸入——
+             不然只是變紅色卻還能點進去，會讓人以為標記是裝飾用的。
+             標成「確定在密碼中」或沒標記則照常輸入。 */
+          ()=>{ if(notes[+k]==='out'){ sMiss(); vib(6); return; } onDigitFn(+k); });
+      } else b.onclick=()=>onDigitFn(+k);
+    }
     el.appendChild(b);
   });
+  if(notes) paintNotes(el,notes);
 }
-function paintCells(cells,buf,lockNow){
+function paintCells(cells,buf,lockNow,pin){
+  const nextIdx = pin ? buf.findIndex(v=>v==null) : buf.length;
   [...cells.children].forEach((c,i)=>{
-    c.textContent=buf[i]??'';
-    c.className='cell'+(buf[i]!==undefined?' on':'')+(i===buf.length&&!lockNow?' next':'');
+    const v=buf[i];
+    c.textContent = v!=null ? v : '';
+    c.className = 'cell'+(v!=null?' on':'')+(i===nextIdx&&!lockNow?' next':'')+(pin&&pin[i]?' pinned':'');
   });
 }
 function paintUsed(pad,buf){
-  pad.querySelectorAll('.key[data-d]').forEach(k=>k.classList.toggle('used',buf.includes(+k.dataset.d)));
-  const ex=pad.querySelector('.exec'); if(ex) ex.disabled=buf.length!==4;
+  const filled=buf.filter(v=>v!=null);
+  pad.querySelectorAll('.key[data-d]').forEach(k=>k.classList.toggle('used',filled.includes(+k.dataset.d)));
+  const ex=pad.querySelector('.exec'); if(ex) ex.disabled=filled.length!==4;
+}
+/* 長按已填入數字的輸入格，切換「釘住這個位置」；下一輪自動幫你填回同一格，
+   直到你再長按解除，或這一場戰鬥／這一波換了新密碼才會整組清空。
+   digitsFn/pinFn 用取值函式而不是直接傳陣列，是因為某些模式（世界大戰）
+   整個戰鬥物件會在換波時被整個重建，直接抓陣列參考在換物件後會失效。 */
+function bindCellPin(cellsEl,digitsFn,pinFn,canPinFn,onChange){
+  [...cellsEl.children].forEach((c,idx)=>{
+    bindLongPress(c,()=>{
+      if(canPinFn&&!canPinFn()) return;
+      const buf=digitsFn(), pin=pinFn();
+      if(!buf||buf[idx]==null) return;
+      pin[idx]=!pin[idx];
+      vib(pin[idx]?[10,18,10]:8);
+      pin[idx]?sGood(1):sBack();
+      onChange();
+    },null);
+  });
 }
 
 /* ================= 節點圖 ================= */
@@ -5143,9 +5227,10 @@ const logEl=$('#log'), candNum=$('#candNum'), foeStat=$('#foeStat');
 const taunt=$('#taunt'), stream=$('#stream'), turnMsg=$('#turnMsg');
 const threatBar=$('#threatBar');
 for(let i=0;i<6;i++) threatBar.appendChild(document.createElement('div')).className='seg';
-buildPad(battlePad,onDigit,onBack,onExec,'攻擊<small>ATTACK</small>');
-function rEntry(){ paintCells(entryCells,entry,lock||over); paintUsed(battlePad,entry);
-  const ex=battlePad.querySelector('.exec'); ex.disabled=entry.length!==4||lock||over; }
+buildPad(battlePad,onDigit,onBack,onExec,'攻擊<small>ATTACK</small>',entryNotes);
+bindCellPin(entryCells,()=>entry,()=>entryPin,()=>!over,()=>rEntry());
+function rEntry(){ paintCells(entryCells,entry,lock||over,entryPin); paintUsed(battlePad,entry);
+  const ex=battlePad.querySelector('.exec'); ex.disabled=entry.some(v=>v==null)||lock||over; }
 function sysLine(t,gold){ const el=document.createElement('div');
   el.className='sys'+(gold?' gold':''); el.textContent=t;
   logEl.appendChild(el); logEl.scrollTop=logEl.scrollHeight; }
@@ -5260,14 +5345,21 @@ function nextRound(){
 function onDigit(d){
   if(over||lock) return;
   if(scanMode){ doScan(d); return; }
-  if(entry.length>=4||entry.includes(d)) return;
-  entry.push(d); sKey(d); vib(9); rEntry();
+  if(entry.includes(d)) return;
+  const i=entry.findIndex(v=>v==null); if(i<0) return;
+  entry[i]=d; sKey(d); vib(9); rEntry();
 }
-function onBack(){ if(over||lock||scanMode||!entry.length)return; entry.pop(); sBack(); vib(6); rEntry(); }
+function onBack(){
+  if(over||lock||scanMode) return;
+  let i=-1; for(let j=3;j>=0;j--){ if(entry[j]!=null&&!entryPin[j]){ i=j; break; } }
+  if(i<0) return;
+  entry[i]=null; sBack(); vib(6); rEntry();
+}
 async function onExec(){
-  if(over||lock||entry.length!==4||scanMode) return;
+  if(over||lock||scanMode||entry.some(v=>v==null)) return;
   lock=true; rEntry(); sFire(); vib(16);
-  const g=entry.slice(); entry=[];
+  const g=entry.slice();
+  for(let i=0;i<4;i++) if(!entryPin[i]) entry[i]=null;
   await wait(reduced?100:420);
   const {A,B}=judge(g,foeCode);
   myHistory.push({g,A,B});
@@ -5583,7 +5675,9 @@ function showPw(){
 /* ================= 單機開局 ================= */
 async function startBattle(code){
   myCode=code; lastCode=code.slice(); foeCode=randCode();
-  entry=[]; myHistory=[]; scanInfo=[]; aiCands=ALL.slice();
+  entry=[null,null,null,null]; entryPin=[false,false,false,false]; entryNotes.fill('none');
+  paintNotes(battlePad,entryNotes);
+  myHistory=[]; scanInfo=[]; aiCands=ALL.slice();
   myCandCount=5040; round=1; over=false; lock=false;
   const TT=TOWER_TIERS[towerTier];
   scanLeft=Math.max(1,(cfg.scans??2)+(own('u_scan')?1:0)+(curLevel?TT.scan:0));
@@ -6942,7 +7036,7 @@ function obDeploy(){
   }
 }
 function obRoomUIReset(){
-  obBuf=[]; obEntry=[]; obScanMode=false; rObSetup();
+  obBuf=[]; obEntry=[null,null,null,null]; obPin=[false,false,false,false]; obScanMode=false; rObSetup();
   $('#obRoomCode').textContent=obRoom.split('').join(' ');
   $('#obRoomTag').textContent=(OBC&&OBC.role==='h')?'ROOM · 你是房主':'ROOM · 已加入';
   $('#obRoomHint').textContent='佈署完成後，雙方都就緒即自動開戰';
@@ -6978,8 +7072,9 @@ $('#btnObLeave1').onclick=()=>{ sBack(); obQuit(); };
 
 /* --- 對戰 --- */
 const obLogEl=$('#obLog'), obEntryCellsEl=$('#obEntryCells'), obPadEl=$('#obPad');
-let obEntry=[], obScanMode=false;
-buildPad(obPadEl,obDigit,obBack,obExec,'攻擊<small>ATTACK</small>');
+let obEntry=[null,null,null,null], obPin=[false,false,false,false], obNotes=makeNotes(), obScanMode=false;
+buildPad(obPadEl,obDigit,obBack,obExec,'攻擊<small>ATTACK</small>',obNotes);
+bindCellPin(obEntryCellsEl,()=>obEntry,()=>obPin,()=>!!(OBC&&!OBC.st.over),()=>obPaintBattle());
 const obKnowBar=$('#obKnowBar');
 for(let i=0;i<6;i++) obKnowBar.appendChild(document.createElement('div')).className='seg';
 function obMyTurn(){ return !!(OBC&&OBC.st.ph==='battle'&&!OBC.st.over&&
@@ -6998,9 +7093,9 @@ function obRow(name,color,g,A,B){
 function obPaintBattle(){
   if(!OBC) return;
   const st=OBC.st, myT=obMyTurn();
-  paintCells(obEntryCellsEl,obEntry,!myT);
+  paintCells(obEntryCellsEl,obEntry,!myT,obPin);
   paintUsed(obPadEl,obEntry);
-  obPadEl.querySelector('.exec').disabled = obEntry.length!==4 || !myT || obScanMode;
+  obPadEl.querySelector('.exec').disabled = obEntry.some(v=>v==null) || !myT || obScanMode;
   $('#obRound').textContent=st.moveNo;
   $('#obTurnMsg').textContent = st.over ? (st.winner===OBC.role?'你贏了！':'你被破解')
     : (st.pending||st.pendScan) ? '等待對方回報…'
@@ -7025,15 +7120,20 @@ function obDigit(d){
     else sBack();
     return;
   }
-  if(obEntry.length>=4||obEntry.includes(d)) return;
-  obEntry.push(d); sKey(d); vib(9); obPaintBattle();
+  if(obEntry.includes(d)) return;
+  const i=obEntry.findIndex(v=>v==null); if(i<0) return;
+  obEntry[i]=d; sKey(d); vib(9); obPaintBattle();
 }
-function obBack(){ if(!obMyTurn()||obScanMode||!obEntry.length) return;
-  obEntry.pop(); sBack(); vib(6); obPaintBattle(); }
+function obBack(){
+  if(!obMyTurn()||obScanMode) return;
+  let i=-1; for(let j=3;j>=0;j--){ if(obEntry[j]!=null&&!obPin[j]){ i=j; break; } }
+  if(i<0) return;
+  obEntry[i]=null; sBack(); vib(6); obPaintBattle();
+}
 function obExec(){
-  if(obEntry.length!==4||!obMyTurn()||obScanMode) return;
+  if(obEntry.some(v=>v==null)||!obMyTurn()||obScanMode) return;
   const g=obEntry.slice();
-  if(obActGuess(OBC,g)){ obEntry=[]; sFire(); vib(16); obPaintBattle(); }
+  if(obActGuess(OBC,g)){ for(let i=0;i<4;i++) if(!obPin[i]) obEntry[i]=null; sFire(); vib(16); obPaintBattle(); }
 }
 $('#btnObScan').onclick=()=>{ if(!obMyTurn()||OBC.st.myScan<=0) return;
   obScanMode=!obScanMode; if(obScanMode) sScan(); obPaintBattle(); };
@@ -7064,7 +7164,8 @@ function obBindUI(C){
     reveal(){ if(OBC&&OBC.st.over&&!overlay.hidden) obShowEnd(); },
     peerRematch(){ const b=$('#btnObAgain');
       if(b&&OBC&&!OBC.st.rematchMe){ b.textContent='對方想再戰！點我接受'; sBoss(); vib([20,30,20]); } },
-    rematchGo(){ overlay.hidden=true; obScanMode=false; obEntry=[];
+    rematchGo(){ overlay.hidden=true; obScanMode=false;
+      obEntry=[null,null,null,null]; obPin=[false,false,false,false];
       document.body.classList.remove('danger','scanning');
       applyTheme('l0'); obRoomUIReset(); show('scrOnlineRoom'); sFire(); },
     bye(){ obBadgeSet('bad','對手離線');
@@ -7076,7 +7177,8 @@ function obBindUI(C){
 async function obStartBattle(){
   if(!OBC) return;
   const st=OBC.st;
-  obEntry=[]; obScanMode=false; obLogEl.innerHTML='';
+  obEntry=[null,null,null,null]; obPin=[false,false,false,false]; obNotes.fill('none'); paintNotes(obPadEl,obNotes);
+  obScanMode=false; obLogEl.innerHTML='';
   const pav=(OBC.peer&&OBC.peer.avatar in THEMES)?OBC.peer.avatar:'l0';
   applyTheme(pav);
   mountEye('#obEye',pav,'ob');
@@ -7142,7 +7244,7 @@ function obQuit(){
   if(USE_FB){
     const wasHost=!!(OBC&&OBC.role==='h');
     obFbCleanup(wasHost);
-    OBC=null; obRoom=''; obEntry=[]; obBuf=[]; obScanMode=false;
+    OBC=null; obRoom=''; obEntry=[null,null,null,null]; obPin=[false,false,false,false]; obBuf=[]; obScanMode=false;
     document.body.classList.remove('danger','scanning');
     applyTheme('l0'); obBadgeSet('','未連線');
     show('scrTitle'); return;
@@ -7152,7 +7254,7 @@ function obQuit(){
   clearInterval(obHealIv); obHealIv=null;
   try{ if(obCli){ if(obTopic) obCli.unsubscribe(obTopic); obCli.end(true); } }catch(e){}
   obCli=null; OBC=null; obTopic=''; obRoom='';
-  obEntry=[]; obBuf=[]; obScanMode=false;
+  obEntry=[null,null,null,null]; obPin=[false,false,false,false]; obBuf=[]; obScanMode=false;
   document.body.classList.remove('danger','scanning');
   applyTheme('l0'); obBadgeSet('','未連線');
   show('scrTitle');
@@ -7301,7 +7403,8 @@ function rdApply(C,m){
       return true; }
     case 'rc': {                                   /* 核心判定結果 */
       if(st.ph!=='battle') return false;
-      if(m.ok){ st.coreIx=m.ci+1; st.teamPool=ALL.slice(); }
+      if(m.ok){ st.coreIx=m.ci+1; st.teamPool=ALL.slice();
+        rdPin=[false,false,false,false]; rdNotes.fill('none'); paintNotes(rdPadEl,rdNotes); }
       else st.teamPool=st.teamPool.filter(c=>{ const x=judge(m.g,c);
         return x.A===m.A&&x.B===m.B; });
       rdU(C,'core',m.g,m.A,m.B,m.ok);
@@ -7461,7 +7564,7 @@ function rdHpPct(p){ return p.pool? Math.max(0,Math.min(100,Math.round(p.pool.le
 
 /* ================= 副本：網路層＋介面 ================= */
 let RD=null, rdRole='D', rdTier='hard', rdRoomCode='', rdMyCode=null;
-let rdBuf=[], rdEntry=[], rdHealMode=false;
+let rdBuf=[], rdEntry=[null,null,null,null], rdPin=[false,false,false,false], rdNotes=makeNotes(), rdHealMode=false;
 const rdUid='u'+Math.random().toString(36).slice(2,9);
 const RD_TIER_NM={easy:'普通',hard:'困難',night:'夢魘'};
 const RD_ROLE_NM={T:'坦克',H:'治療',D:'輸出'};
@@ -7522,7 +7625,7 @@ async function rdEnterRoom(isHost,code){
     RD.sendRaw=m=>{ try{ obCli.publish(obTopic,JSON.stringify(m),{qos:1}); }catch(e){} };
   }
   if(!isHost) rdPost(RD,{t:'rj',uid:rdUid,name:rdMyName(),av:obAvatar,role:rdRole},false);
-  rdBuf=[]; rdEntry=[]; rdMyCode=null; rdHealMode=false;
+  rdBuf=[]; rdEntry=[null,null,null,null]; rdPin=[false,false,false,false]; rdMyCode=null; rdHealMode=false;
   rdRoomUI();
   show('scrRaidRoom');
   bH.disabled=bJ.disabled=false; sFire(); vib(12);
@@ -7643,13 +7746,17 @@ function rdRenderRoster(){
 /* ---- 戰鬥 ---- */
 const rdEntryCells=$('#rdEntryCells'), rdPadEl=$('#rdPad'), rdLogEl=$('#rdLog');
 buildPad(rdPadEl,
-  d=>{ if(!rdCanAct())return; if(rdEntry.length>=4||rdEntry.includes(d))return;
-    rdEntry.push(d); sKey(d); vib(9); rdPaintBattle(); },
-  ()=>{ if(!rdCanAct()||!rdEntry.length)return; rdEntry.pop(); sBack(); vib(6); rdPaintBattle(); },
-  ()=>{ if(!rdCanAct()||rdEntry.length!==4)return;
+  d=>{ if(!rdCanAct())return; if(rdEntry.includes(d))return;
+    const i=rdEntry.findIndex(v=>v==null); if(i<0)return;
+    rdEntry[i]=d; sKey(d); vib(9); rdPaintBattle(); },
+  ()=>{ if(!rdCanAct())return;
+    let i=-1; for(let j=3;j>=0;j--){ if(rdEntry[j]!=null&&!rdPin[j]){ i=j; break; } }
+    if(i<0)return; rdEntry[i]=null; sBack(); vib(6); rdPaintBattle(); },
+  ()=>{ if(!rdCanAct()||rdEntry.some(v=>v==null))return;
     const g=rdEntry.slice();
-    if(rdActGuess(RD,g)){ rdEntry=[]; sFire(); vib(16); rdPaintBattle(); } },
-  '攻擊核心<small>ATTACK</small>');
+    if(rdActGuess(RD,g)){ for(let i=0;i<4;i++) if(!rdPin[i]) rdEntry[i]=null; sFire(); vib(16); rdPaintBattle(); } },
+  '攻擊核心<small>ATTACK</small>',rdNotes);
+bindCellPin(rdEntryCells,()=>rdEntry,()=>rdPin,()=>!!(RD&&!RD.st.over),()=>rdPaintBattle());
 function rdCanAct(){ return !!(RD&&rdMyTurn(RD)&&!rdHealMode); }
 function rdSys(t,gold){ const el=document.createElement('div');
   el.className='sys'+(gold?' gold':''); el.textContent=t;
@@ -7715,9 +7822,9 @@ function rdPaintBattle(){
   rdRenderBoss(); rdRenderParty();
   $('#rdRoundNo').textContent=st.round;
   $('#rdCands').textContent=(st.teamPool?st.teamPool.length:5040);
-  paintCells(rdEntryCells,rdEntry,!rdCanAct());
+  paintCells(rdEntryCells,rdEntry,!rdCanAct(),rdPin);
   paintUsed(rdPadEl,rdEntry);
-  rdPadEl.querySelector('.exec').disabled=!rdCanAct()||rdEntry.length!==4;
+  rdPadEl.querySelector('.exec').disabled=!rdCanAct()||rdEntry.some(v=>v==null);
   const bt=$('#btnRdTaunt'), bh=$('#btnRdHeal');
   bt.disabled=!(mine&&me&&me.role==='T'&&!st.over);
   bh.disabled=!(mine&&me&&me.role==='H'&&me.mp>0&&!st.over);
@@ -7768,7 +7875,8 @@ function rdBindUI(C){
 async function rdStartBattle(){
   if(!RD) return;
   const st=RD.st;
-  rdEntry=[]; rdHealMode=false; rdLogEl.innerHTML='';
+  rdEntry=[null,null,null,null]; rdPin=[false,false,false,false]; rdNotes.fill('none'); paintNotes(rdPadEl,rdNotes);
+  rdHealMode=false; rdLogEl.innerHTML='';
   applyTheme('l10'); mountEye('#rdBossEye','l10','rdb');
   $('#rdTbRoom').textContent=rdRoomCode;
   $('#rdTbTier').textContent=RD_TIER_NM[st.tier]||'困難';
@@ -7816,7 +7924,7 @@ $('#btnRdHeal').onclick=()=>{ if(!RD) return; rdHealMode=!rdHealMode; sKey(7); r
 function rdQuit(){
   if(USE_FB){ obFbCleanup(!!(RD&&RD.host)); }
   else { try{ if(obCli){ obCli.unsubscribe(obTopic); obCli.end(true); } }catch(e){} obCli=null; }
-  RD=null; rdRoomCode=''; rdMyCode=null; rdBuf=[]; rdEntry=[]; rdHealMode=false;
+  RD=null; rdRoomCode=''; rdMyCode=null; rdBuf=[]; rdEntry=[null,null,null,null]; rdPin=[false,false,false,false]; rdHealMode=false;
   document.body.classList.remove('danger','scanning');
   applyTheme('l0'); obBadgeSet('','未連線');
   show('scrTitle');
@@ -7837,11 +7945,14 @@ window.addEventListener('keydown',e=>{
     else if(e.key==='Enter') rdDeploy();
   } else if(phase==='scrRaidBattle'){
     if(!rdCanAct()) return;
-    if(/^[0-9]$/.test(e.key)){ if(rdEntry.length<4&&!rdEntry.includes(+e.key)){
-      rdEntry.push(+e.key); sKey(+e.key); rdPaintBattle(); } }
-    else if(e.key==='Backspace'){ if(rdEntry.length){ rdEntry.pop(); sBack(); rdPaintBattle(); } }
-    else if(e.key==='Enter'&&rdEntry.length===4){
-      const g=rdEntry.slice(); if(rdActGuess(RD,g)){ rdEntry=[]; sFire(); rdPaintBattle(); } }
+    if(/^[0-9]$/.test(e.key)){ const d=+e.key; if(!rdEntry.includes(d)){
+      const i=rdEntry.findIndex(v=>v==null); if(i>=0){ rdEntry[i]=d; sKey(d); rdPaintBattle(); } } }
+    else if(e.key==='Backspace'){
+      let i=-1; for(let j=3;j>=0;j--){ if(rdEntry[j]!=null&&!rdPin[j]){ i=j; break; } }
+      if(i>=0){ rdEntry[i]=null; sBack(); rdPaintBattle(); } }
+    else if(e.key==='Enter'&&rdEntry.every(v=>v!=null)){
+      const g=rdEntry.slice();
+      if(rdActGuess(RD,g)){ for(let i=0;i<4;i++) if(!rdPin[i]) rdEntry[i]=null; sFire(); rdPaintBattle(); } }
   }
 });
 
@@ -9808,6 +9919,7 @@ const DUNS=[
 
 /* ================= 天眼副本 · 遊戲邏輯 ================= */
 let TOS=null, tosB=null, tosPickSlot=-1;
+let tosNotes=makeNotes();
 function tosLoad(){
   const d={own:{l1:{e:0,n:1},l2:{e:0,n:1},l0:{e:0,n:1}}, team:['l1','l2','l0',null,null], fuse:{}};
   const v=LS.get('tos',null);
@@ -10244,7 +10356,7 @@ function tosStart(dun,isSquad){
   const S=teamStats();
   if(!S.n){ sMiss(); squadRun=false; return; }
   tosB={ dun, waveIx:-1, atk:S.atk, maxHp:S.hp, hp:S.hp, lead:S.lead, el:S.el,
-    turn:0, entry:[], pool:null, foe:null, log:[], effLog:[], sight:0, busy:false,
+    turn:0, entry:[null,null,null,null], pin:[false,false,false,false], pool:null, foe:null, log:[], effLog:[], sight:0, busy:false,
     cds:teamCards().map(x=>({ac:x.c.ac, c:x.c, left:0})), guard:false, burst:false };
   $('#tbDun').textContent=dun.nm;
   $('#tbWaves').textContent=dun.waves.length;
@@ -10301,7 +10413,8 @@ function tosNextWave(){
   const cutRate=B.lead==='cut20'?.2:B.lead==='cut10'?.1:0;
   if(cutRate>0) B.pool=B.pool.filter(c=>
     c.join('')===B.foe.code.join('')||Math.random()>cutRate);
-  B.entry=[]; B.turn=0; B.sight=0; B.busy=false;
+  B.entry=[null,null,null,null]; B.pin=[false,false,false,false]; B.turn=0; B.sight=0; B.busy=false;
+  tosNotes.fill('none'); paintNotes($('#tosPad'),tosNotes);
   /* 上一波的猜測是針對別的答案，留在紀錄裡會讓人以為和新題目有關。
      淡化並標記，比直接清空好：玩家還能回看自己怎麼推的。 */
   $('#tosLog').querySelectorAll('.row.obr:not(.stale)').forEach(el=>el.classList.add('stale'));
@@ -10344,16 +10457,28 @@ function tosPaint(){
     : (pierce?'':'回饋：'+T.ds);
   const cells=$('#tosCells');
   if(cells.children.length!==4) cells.innerHTML='<div class="cell"></div>'.repeat(4);
-  paintCells(cells,B.entry,false);
+  paintCells(cells,B.entry,false,B.pin);
   const pad=$('#tosPad');
   if(!pad.children.length){
-    buildPad(pad,d=>{ if(B.entry.length>=4||B.entry.includes(d))return;
-        B.entry.push(d); sKey(d); vib(8); tosPaint(); },
-      ()=>{ if(!B.entry.length)return; B.entry.pop(); sBack(); tosPaint(); },
-      tosGuess,'推理<small>DEDUCE</small>');
+    /* 這裡故意不直接用上面的區域變數 B——鍵盤只會建立這一次，
+       之後每次換波／換副本 tosB 都會變成新物件，若閉包捕捉的是
+       建立當下的 B，重打一輪副本後鍵盤就會寫進舊的、已經沒人理的物件。
+       改成每次點擊時重新讀取全域 tosB，才能一直對到「現在」這一場。 */
+    buildPad(pad,
+      d=>{ const B=tosB; if(!B||B.busy) return; if(B.entry.includes(d)) return;
+        const i=B.entry.findIndex(v=>v==null); if(i<0) return;
+        B.entry[i]=d; sKey(d); vib(8); tosPaint(); },
+      ()=>{ const B=tosB; if(!B||B.busy) return;
+        let i=-1; for(let j=3;j>=0;j--){ if(B.entry[j]!=null&&!B.pin[j]){ i=j; break; } }
+        if(i<0) return; B.entry[i]=null; sBack(); tosPaint(); },
+      tosGuess,'推理<small>DEDUCE</small>',tosNotes);
+  }
+  if(!cells.dataset.pinBound){
+    cells.dataset.pinBound='1';
+    bindCellPin(cells,()=>tosB&&tosB.entry,()=>tosB&&tosB.pin,()=>!!(tosB&&!tosB.busy),()=>tosPaint());
   }
   paintUsed(pad,B.entry);
-  pad.querySelector('.exec').disabled=B.entry.length!==4;
+  pad.querySelector('.exec').disabled=B.entry.some(v=>v==null);
   const sk=$('#tosSkills');
   sk.innerHTML=B.cds.map((x,i)=>{
     const A=ACTIVES[x.ac];
@@ -10379,8 +10504,9 @@ function tosGuess(){
      回饋看起來就會自相矛盾（0752→1A0B 與 0754→0A2B 不可能同時成立）；
      擊倒分支也會被重複觸發，多排一次 tosNextWave 而整波被跳過。 */
   if(B.busy) return;
-  if(B.entry.length!==4) return;
-  const g=B.entry.slice(); B.entry=[];
+  if(B.entry.some(v=>v==null)) return;
+  const g=B.entry.slice();
+  for(let i=0;i<4;i++) if(!B.pin[i]) B.entry[i]=null;
   const pierceNow=B.lead==='pierce'||(B.lead==='pierce3'&&B.turn<3);
   const F=B.foe, T=TRAITS[pierceNow?'none':F.tr];
   const r=wJudge(g,F.code), before=B.pool.length;
@@ -10416,7 +10542,7 @@ function tosGuess(){
     tosSys('◆ 擊倒 '+F.card.nm+(r.A===4?'（完全解讀 '+F.code.join('')+'）':'')+'　回復 '+
       Math.round(B.maxHp*HEAL_KILL)+' HP',true);
     B.cds.forEach(x=>{ if(x.left>0) x.left--; });
-    B.busy=true; B.entry=[];
+    B.busy=true; B.entry=[null,null,null,null];
     setTimeout(()=>{ B.busy=false; tosNextWave(); tosLockUI(); },650);
     tosPaint(); return;
   }
@@ -10529,10 +10655,13 @@ $('#btnTosQuit').onclick=function(){
 window.addEventListener('keydown',e=>{
   if(!overlay.hidden||phase!=='scrTosBattle'||!tosB) return;
   const B=tosB;
-  if(/^[0-9]$/.test(e.key)){ if(B.entry.length<4&&!B.entry.includes(+e.key)){
-    B.entry.push(+e.key); sKey(+e.key); tosPaint(); } }
-  else if(e.key==='Backspace'){ if(B.entry.length){ B.entry.pop(); sBack(); tosPaint(); } }
-  else if(e.key==='Enter'&&B.entry.length===4) tosGuess();
+  if(B.busy) return;
+  if(/^[0-9]$/.test(e.key)){ const d=+e.key; if(!B.entry.includes(d)){
+    const i=B.entry.findIndex(v=>v==null); if(i>=0){ B.entry[i]=d; sKey(d); tosPaint(); } } }
+  else if(e.key==='Backspace'){
+    let i=-1; for(let j=3;j>=0;j--){ if(B.entry[j]!=null&&!B.pin[j]){ i=j; break; } }
+    if(i>=0){ B.entry[i]=null; sBack(); tosPaint(); } }
+  else if(e.key==='Enter'&&B.entry.every(v=>v!=null)) tosGuess();
 });
 
 /* ================= 實體鍵盤 ================= */
