@@ -271,6 +271,84 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .row .m{color:#77799F;font-size:11px}
 .row.hit .g{text-shadow:0 0 10px currentColor}
 
+.battlelog.panel{position:relative;overflow:hidden}
+.battlelog.panel::before{content:"";position:absolute;left:0;right:0;height:46px;top:-46px;z-index:1;
+  background:linear-gradient(rgba(40,230,200,0),rgba(40,230,200,.05),rgba(40,230,200,0));
+  animation:lgscan 6s linear infinite;pointer-events:none}
+@keyframes lgscan{0%{transform:translateY(0)}100%{transform:translateY(340px)}}
+@media (prefers-reduced-motion:reduce){ .battlelog.panel::before{animation:none} }
+.battlelog .ptitle{display:flex;align-items:center;gap:6px;position:relative;z-index:1}
+.battlelog .ptitle::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--me);
+  box-shadow:0 0 5px var(--me);animation:lgpulse 1.8s ease-in-out infinite;flex-shrink:0}
+@keyframes lgpulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){ .battlelog .ptitle::before{animation:none} }
+.log>.row2:nth-last-child(1){opacity:1}.log>.row2:nth-last-child(2){opacity:1}
+.log>.row2:nth-last-child(3){opacity:.92}.log>.row2:nth-last-child(4){opacity:.84}
+.log>.row2:nth-last-child(5){opacity:.76}.log>.row2:nth-last-child(6){opacity:.68}
+.log>.row2:nth-last-child(7){opacity:.6}
+.log>.row2:nth-last-child(n+8){opacity:.52}
+.row2{display:flex;align-items:center;gap:7px;padding:6px 8px;margin-bottom:5px;border-radius:9px;
+  border:0.5px solid rgba(150,150,220,.1);position:relative;z-index:1}
+.row2.hit{border-color:rgba(255,215,94,.5);box-shadow:0 0 10px rgba(255,215,94,.16)}
+.row2.stale{opacity:.32!important}
+.row2 .lgnode{display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;
+  background:rgba(150,150,220,.14);color:var(--dim);font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
+.row2.hit .lgnode{background:var(--gold);color:#0A0510;box-shadow:0 0 7px var(--gold)}
+.row2.me .lgnode{background:rgba(40,230,200,.16);color:var(--me)}
+.row2.foe .lgnode{background:rgba(255,59,87,.16);color:var(--foe)}
+.row2 .lgtag{font-size:11px;font-weight:600;flex-shrink:0;max-width:60px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.row2 .lgchips{display:flex;gap:2px;flex-shrink:0}
+.row2 .lgd{display:inline-flex;align-items:center;justify-content:center;width:16px;height:18px;border-radius:4px;
+  background:linear-gradient(180deg,rgba(40,230,200,.15),rgba(40,230,200,.03));border:1px solid rgba(40,230,200,.26);
+  font-family:var(--mono);font-weight:700;font-size:10.5px;color:#D6FFF6}
+.row2.masked .lgd{color:#6A5A7F;border-color:rgba(150,150,220,.15);background:none;filter:blur(.4px)}
+.row2 .lgfill{flex:1}
+.row2 .lgresult{display:flex;gap:5px;align-items:center;flex-shrink:0}
+.row2 .lgbadge{display:inline-flex;align-items:center;gap:3px;border-radius:20px;padding:1px 6px;
+  font-family:var(--mono);font-size:10px;font-weight:700}
+.row2 .lgbadge::before{content:"";width:5px;height:5px;border-radius:50%}
+.row2 .lgbadge.lga{background:rgba(70,255,158,.13);border:1px solid rgba(70,255,158,.4);color:var(--grn)}
+.row2 .lgbadge.lga::before{background:var(--grn);box-shadow:0 0 4px var(--grn)}
+.row2 .lgbadge.lgb{background:rgba(255,197,61,.13);border:1px solid rgba(255,197,61,.4);color:var(--amb)}
+.row2 .lgbadge.lgb::before{background:var(--amb);box-shadow:0 0 4px var(--amb)}
+.row2 .lgbadge.lgmask{background:rgba(150,150,220,.1);border:1px solid rgba(150,150,220,.25);color:#6A5A7F}
+.row2 .lgmiss{font-family:var(--mono);font-size:10px;color:var(--dim)}
+.row2 .lgpend{font-family:var(--mono);font-size:10px;color:var(--dim)}
+.row2 .lgextra{font-family:var(--mono);font-size:9.5px;color:var(--dim);flex-shrink:0}
+
+.battlelog .ptitle{justify-content:space-between}
+.logExpandBtn{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.5px;color:var(--me);
+  background:rgba(40,230,200,.1);border:0.5px solid rgba(40,230,200,.35);border-radius:20px;
+  padding:3px 10px;cursor:pointer;position:relative;z-index:1}
+.logExpandBtn:active{transform:scale(.94)}
+.logOverlay{position:fixed;inset:0;z-index:61;display:grid;place-items:center;padding:16px;
+  background:rgba(6,3,16,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:fi .25s ease}
+.logCard{width:min(94vw,440px);height:80dvh;max-height:80dvh;display:flex;flex-direction:column;border-radius:16px;
+  background:linear-gradient(180deg,rgba(30,16,44,.98),rgba(10,5,22,.98));border:0.5px solid var(--line);
+  box-shadow:0 30px 90px -20px #000;animation:cIn2 .3s cubic-bezier(.2,.9,.3,1);overflow:hidden}
+.logCardHead{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0}
+.logCardHead .ptitle{font-size:12px;letter-spacing:1.5px}
+.logCloseBtn{font-family:var(--mono);font-size:11px;color:var(--dim);background:rgba(150,150,220,.1);
+  border:0.5px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer}
+.logCloseBtn:active{transform:scale(.94)}
+.logFull{flex:1;max-height:none;margin:0;padding:2px 16px 16px;font-size:14px}
+#logFull .row2.foe{display:none}
+#logFull[data-src="log"] .sys{display:none}
+#logFull{max-height:none}
+#logOverlayConv{flex-shrink:0;padding:0 16px}
+.convbar{margin:8px 0 10px;position:relative;z-index:1}
+.convrow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:4px}
+.convrow b{color:var(--grn)}
+.convtrack{height:5px;background:rgba(150,150,220,.1);border-radius:3px;overflow:hidden}
+.convfill{height:100%;background:linear-gradient(90deg,#0F6E56,var(--me));box-shadow:0 0 8px rgba(40,230,200,.5);
+  border-radius:3px;transition:width .5s ease}
+.row2.best-clue{border-color:rgba(255,215,94,.4);box-shadow:0 0 10px rgba(255,215,94,.14)}
+.row2 .lgbest{font-family:var(--mono);font-size:9px;color:var(--gold);margin-right:4px;flex-shrink:0;white-space:nowrap}
+.log>.row2.lgpin{position:sticky;bottom:0;margin-top:8px;padding-top:9px;opacity:1;z-index:1;
+  border-top:1px dashed rgba(255,215,94,.4);
+  background:linear-gradient(180deg,rgba(20,10,34,0),rgba(16,8,28,.94) 30%)}
+
 .console{padding:12px 13px 13px}
 .chead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:8px}
 .mycode{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;color:var(--dim);
@@ -2624,6 +2702,10 @@ body[data-phase="scrBoot"] #bootScene{display:block}
 
     <div class="battlelog panel">
       <span class="ptitle">戰鬥紀錄 BATTLE LOG</span>
+      <div class="convbar" id="convBar">
+        <div class="convrow"><span>收斂進度</span><span id="convTxt">5040 → <b>5040</b></span></div>
+        <div class="convtrack"><div class="convfill" id="convFill" style="width:0%"></div></div>
+      </div>
       <div class="log" id="log"></div>
     </div>
 
@@ -3306,6 +3388,16 @@ body[data-phase="scrBoot"] #bootScene{display:block}
 </div>
 
 <div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+<div class="logOverlay" id="logOverlay" hidden>
+  <div class="logCard">
+    <div class="logCardHead">
+      <span class="ptitle">完整戰鬥紀錄</span>
+      <button type="button" id="logOverlayClose" class="logCloseBtn">收合</button>
+    </div>
+    <div class="convbar" id="logOverlayConv" hidden></div>
+    <div class="log logFull" id="logFull"></div>
+  </div>
+</div>
   <div id="legend" aria-live="polite"></div>
 
 <script>
@@ -4804,6 +4896,7 @@ let cfg=null, curLevel=0;
 let myCode=[], foeCode=[], setupBuf=[], entry=[null,null,null,null], lastCode=null;
 let entryPin=[false,false,false,false], entryNotes=makeNotes();
 let aiCands=[], myCandCount=5040, myHistory=[], scanInfo=[];
+let bestClueRow=null, bestClueVal=0;
 let round=1, over=false, lock=false, scanLeft=2, scanMode=false;
 let startT=0, timer=null, heartIv=null, lastTauntRound=-2;
 
@@ -5158,6 +5251,92 @@ function bindCellPin(cellsEl,digitsFn,pinFn,canPinFn,onChange){
   });
 }
 
+/* ================= 戰鬥紀錄 HUD 元件 ================= */
+/* 四種對戰模式（單人／好友／組隊／世界大戰）共用同一套紀錄外觀：
+   數字晶片＋A/B膠囊指示燈＋圓形回合節點，並且一律新到舊排列
+   （插在最前面），玩家不用為了比對前面的猜測而一直往上滑。 */
+function logChips(g,masked){
+  return g.map(d=>'<span class="lgd">'+(masked?'?':d)+'</span>').join('');
+}
+function logBadges(A,B,masked){
+  if(masked) return '<span class="lgbadge lgmask">█A █B</span>';
+  if(A===0&&B===0) return '<span class="lgmiss">MISS</span>';
+  let h='';
+  if(A>0) h+='<span class="lgbadge lga">'+A+'A</span>';
+  if(B>0) h+='<span class="lgbadge lgb">'+B+'B</span>';
+  return h;
+}
+function logNode(n){ return '<span class="lgnode">'+String(n).padStart(2,'0')+'</span>'; }
+/* 2024 改版：新的一手排在最下面（像聊天室），捲動位置固定停在最底。
+   釘選的最佳線索列本來就是唯一一個用 appendChild 硬釘在最後的元素，
+   這裡新增一手之後要再把它推回最後一位，不然會被新紀錄擠到中間去。 */
+function mountLog(logEl,el){
+  logEl.appendChild(el);
+  const pin=logEl.querySelector(':scope>.lgpin');
+  if(pin) logEl.appendChild(pin);
+  logEl.scrollTop=logEl.scrollHeight;
+  return el;
+}
+/* 小視窗只夠放幾行，想回顧整場戰鬥時就整段複製進大視窗，
+   不用另外維護一份資料——反正畫面上已經渲染好的紀錄本身就是最新的。 */
+function initLogExpand(){
+  document.querySelectorAll('.battlelog.panel').forEach(panel=>{
+    const title=panel.querySelector('.ptitle'), logBox=panel.querySelector('.log');
+    if(!title||!logBox||title.querySelector('.logExpandBtn')) return;
+    const btn=document.createElement('button');
+    btn.type='button'; btn.className='logExpandBtn'; btn.textContent='展開';
+    btn.setAttribute('aria-label','展開完整紀錄');
+    btn.onclick=()=>openLogOverlay(logBox);
+    title.appendChild(btn);
+  });
+}
+function openLogOverlay(logBox){
+  const panel=logBox.closest('.battlelog.panel');
+  const conv=panel?panel.querySelector('.convbar'):null;
+  const dest=$('#logOverlayConv');
+  if(conv){ dest.innerHTML=conv.innerHTML; dest.hidden=false; } else { dest.hidden=true; }
+  const full=$('#logFull');
+  full.dataset.src=logBox.id;
+  full.innerHTML=logBox.innerHTML;
+  full.scrollTop=full.scrollHeight;
+  $('#logOverlay').hidden=false; sKey(6); vib(8);
+}
+$('#logOverlayClose').onclick=()=>{ $('#logOverlay').hidden=true; sBack(); };
+initLogExpand();
+/* 收斂進度條跟「最佳線索」只有單人闖關目前有現成的候選數資料可以算，
+   好友對戰／組隊那邊沒有追蹤同一份資料，先不做，免得算錯誤導玩家。 */
+function updateConvBar(current,total){
+  const fill=$('#convFill'), txt=$('#convTxt');
+  if(!fill||!txt) return;
+  const pct=total>0?Math.max(2,100-(current/total*100)):100;
+  fill.style.width=pct+'%';
+  txt.innerHTML=total.toLocaleString()+' → <b>'+current.toLocaleString()+'</b>';
+}
+function markBestClue(el,cutVal){
+  if(!el||!(cutVal>bestClueVal)) return;
+  if(bestClueRow){
+    bestClueRow.classList.remove('best-clue');
+    const old=bestClueRow.querySelector('.lgbest'); if(old) old.remove();
+  }
+  bestClueVal=cutVal; bestClueRow=el; el.classList.add('best-clue');
+  const tag=document.createElement('span'); tag.className='lgbest';
+  tag.textContent='最佳線索 -'+cutVal.toLocaleString();
+  const fillSlot=el.querySelector('.lgfill');
+  if(fillSlot) el.insertBefore(tag,fillSlot); else el.appendChild(tag);
+  pinBestClue(el);
+}
+/* 把目前的最佳線索複製一份釘在紀錄最底部（position:sticky，捲到底也看得到）。
+   原本那一列留在時間序裡完全不動，其他紀錄照舊排列；被超越時舊的釘選列
+   直接整個換掉，不用去猜它「應該」回到時間序的哪個位置。 */
+function pinBestClue(sourceEl){
+  const logEl=sourceEl.closest('.log'); if(!logEl) return;
+  const old=logEl.querySelector(':scope>.lgpin'); if(old) old.remove();
+  const pin=sourceEl.cloneNode(true);
+  pin.classList.add('lgpin'); pin.removeAttribute('id');
+  const node=pin.querySelector('.lgnode'); if(node) node.textContent='🔒';
+  logEl.appendChild(pin);
+}
+
 /* ================= 節點圖 ================= */
 const mapList=$('#mapList');
 function renderMap(){
@@ -5233,17 +5412,15 @@ function rEntry(){ paintCells(entryCells,entry,lock||over,entryPin); paintUsed(b
   const ex=battlePad.querySelector('.exec'); ex.disabled=entry.some(v=>v==null)||lock||over; }
 function sysLine(t,gold){ const el=document.createElement('div');
   el.className='sys'+(gold?' gold':''); el.textContent=t;
-  logEl.appendChild(el); logEl.scrollTop=logEl.scrollHeight; }
+  mountLog(logEl,el); }
 function addRow(who,n,g,A,B,hit,masked){
-  const el=document.createElement('div'); el.className='row '+who+(hit?' hit':'')+(masked?' masked':'');
-  const gTxt = masked ? '? ? ? ?' : g.join(' ');
-  const abTxt = masked ? '<span class="ab">█A █B</span>'
-    : ((A===0&&B===0)?'<span class="m">MISS</span>'
-      :'<span class="ab"><span class="a">'+A+'A</span><span class="b">'+B+'B</span></span>');
-  el.innerHTML='<span class="who">'+(who==='me'?'你':'守')+'</span>'+
-    '<span class="n">#'+String(n).padStart(2,'0')+'</span>'+
-    '<span class="g">'+gTxt+'</span>'+abTxt;
-  logEl.appendChild(el); logEl.scrollTop=logEl.scrollHeight;
+  const el=document.createElement('div'); el.className='row row2 '+who+(hit?' hit':'')+(masked?' masked':'');
+  el.innerHTML=logNode(n)+
+    '<span class="lgtag">'+(who==='me'?'你':'守')+'</span>'+
+    '<span class="lgchips">'+logChips(g,masked)+'</span>'+
+    '<span class="lgfill"></span>'+
+    '<span class="lgresult">'+logBadges(A,B,masked)+'</span>';
+  return mountLog(logEl,el);
 }
 function tweenNum(el,to){
   const from=parseInt(el.textContent.replace(/\D/g,''))||0;
@@ -5363,8 +5540,11 @@ async function onExec(){
   await wait(reduced?100:420);
   const {A,B}=judge(g,foeCode);
   myHistory.push({g,A,B});
+  const beforeN=myCandCount;
   myCandCount=countMine(); tweenNum($('#myCands'),myCandCount);
-  addRow('me',round,g,A,B,A===4);
+  updateConvBar(myCandCount,5040);
+  const rowEl=addRow('me',round,g,A,B,A===4);
+  markBestClue(rowEl,beforeN-myCandCount);
   if(A===4){ victory(); return; }
   (A===0&&B===0)?(sMiss(),vib([35,45,35])):(sGood(A),vib(12));
   if(A===3||myCandCount<=3) say(T_FEAR);
@@ -5679,6 +5859,7 @@ async function startBattle(code){
   paintNotes(battlePad,entryNotes);
   myHistory=[]; scanInfo=[]; aiCands=ALL.slice();
   myCandCount=5040; round=1; over=false; lock=false;
+  bestClueRow=null; bestClueVal=0; updateConvBar(5040,5040);
   const TT=TOWER_TIERS[towerTier];
   scanLeft=Math.max(1,(cfg.scans??2)+(own('u_scan')?1:0)+(curLevel?TT.scan:0));
   scanMode=false; lastTauntRound=-2;
@@ -7081,14 +7262,15 @@ function obMyTurn(){ return !!(OBC&&OBC.st.ph==='battle'&&!OBC.st.over&&
   OBC.st.turn===OBC.role&&!OBC.st.pending&&!OBC.st.pendScan); }
 function obSys(t,gold){ const el=document.createElement('div');
   el.className='sys'+(gold?' gold':''); el.textContent=t;
-  obLogEl.appendChild(el); obLogEl.scrollTop=obLogEl.scrollHeight; }
+  mountLog(obLogEl,el); }
 function obRow(name,color,g,A,B){
-  const el=document.createElement('div'); el.className='row obr'+(A===4?' hit':'');
-  el.innerHTML='<span class="who" style="color:'+color+'">'+esc(name)+'</span>'+
-    '<span class="g">'+g.join(' ')+'</span>'+
-    ((A===0&&B===0)?'<span class="m">MISS</span>'
-      :'<span><span class="a">'+A+'A</span><span class="b">'+B+'B</span></span>');
-  obLogEl.appendChild(el); obLogEl.scrollTop=obLogEl.scrollHeight;
+  const el=document.createElement('div'); el.className='row row2 obr'+(A===4?' hit':'');
+  el.innerHTML=logNode(obRow.n=(obRow.n||0)+1)+
+    '<span class="lgtag" style="color:'+color+'">'+esc(name)+'</span>'+
+    '<span class="lgchips">'+logChips(g)+'</span>'+
+    '<span class="lgfill"></span>'+
+    '<span class="lgresult">'+logBadges(A,B)+'</span>';
+  mountLog(obLogEl,el);
 }
 function obPaintBattle(){
   if(!OBC) return;
@@ -7178,7 +7360,7 @@ async function obStartBattle(){
   if(!OBC) return;
   const st=OBC.st;
   obEntry=[null,null,null,null]; obPin=[false,false,false,false]; obNotes.fill('none'); paintNotes(obPadEl,obNotes);
-  obScanMode=false; obLogEl.innerHTML='';
+  obScanMode=false; obLogEl.innerHTML=''; obRow.n=0;
   const pav=(OBC.peer&&OBC.peer.avatar in THEMES)?OBC.peer.avatar:'l0';
   applyTheme(pav);
   mountEye('#obEye',pav,'ob');
@@ -7760,12 +7942,15 @@ bindCellPin(rdEntryCells,()=>rdEntry,()=>rdPin,()=>!!(RD&&!RD.st.over),()=>rdPai
 function rdCanAct(){ return !!(RD&&rdMyTurn(RD)&&!rdHealMode); }
 function rdSys(t,gold){ const el=document.createElement('div');
   el.className='sys'+(gold?' gold':''); el.textContent=t;
-  rdLogEl.appendChild(el); rdLogEl.scrollTop=rdLogEl.scrollHeight; }
+  mountLog(rdLogEl,el); }
 function rdRow(nm,color,g,txt){
-  const el=document.createElement('div'); el.className='row obr';
-  el.innerHTML='<span class="who" style="color:'+color+'">'+esc(nm)+'</span>'+
-    '<span class="g">'+g.join(' ')+'</span><span>'+txt+'</span>';
-  rdLogEl.appendChild(el); rdLogEl.scrollTop=rdLogEl.scrollHeight;
+  const el=document.createElement('div'); el.className='row row2 obr';
+  el.innerHTML=logNode(rdRow.n=(rdRow.n||0)+1)+
+    '<span class="lgtag" style="color:'+color+'">'+esc(nm)+'</span>'+
+    '<span class="lgchips">'+logChips(g)+'</span>'+
+    '<span class="lgfill"></span>'+
+    '<span class="lgresult">'+txt+'</span>';
+  return mountLog(rdLogEl,el);
 }
 function rdPName(pid){ const p=RD&&rdP(RD.st,pid); return p?p.name:('P'+pid); }
 function rdPColor(pid){ const p=RD&&rdP(RD.st,pid);
@@ -7836,16 +8021,18 @@ function rdPaintBattle(){
     : mine ? '猜 Boss 的核心密碼' : '　';
 }
 function rdBindUI(C){
+  let lastGuessRowEl=null, lastAtkRowEl=null;
   C.ui={
     roster(){ rdRenderRoster(); if(phase==='scrRaidRoom'){ sKey(8); } },
     start(){ rdStartBattle(); },
     turn(){ if(phase==='scrRaidBattle'){ rdPaintBattle();
       if(rdMyTurn(C)){ sGood(2); vib([12,20,12]); } } },
-    guess(pid,g){ rdRow(rdPName(pid),rdPColor(pid),g,'<span class="m">▸ 核心</span>'); },
+    guess(pid,g){ lastGuessRowEl=rdRow(rdPName(pid),rdPColor(pid),g,'<span class="m">▸ 核心</span>'); },
     core(g,A,B,ok){
-      const last=rdLogEl.lastElementChild;
-      if(last&&last.classList.contains('row')){
-        last.lastElementChild.innerHTML = ok?'<span class="a">核心破解！</span>'
+      const last=lastGuessRowEl;
+      if(last){
+        const slot=last.querySelector('.lgresult');
+        if(slot) slot.innerHTML = ok?'<span class="a">核心破解！</span>'
           :'<span class="a">'+A+'A</span><span class="b">'+B+'B</span>';
         if(ok) last.classList.add('hit');
       }
@@ -7856,15 +8043,15 @@ function rdBindUI(C){
       rdSys('✨ '+rdPName(src)+' 治療了 '+rdPName(target)+' —— 密碼已更換，血量回滿');
       sScan(); rdPaintBattle(); },
     taunt(src){ rdSys('🛡 '+rdPName(src)+' 發動嘲諷，吸引 Boss 全部火力'); sBoss(); rdPaintBattle(); },
-    atk(target,g){ rdRow('Boss ▸ '+rdPName(target),'#FF3B57',g,'<span class="m">…</span>'); },
+    atk(target,g){ lastAtkRowEl=rdRow('Boss ▸ '+rdPName(target),'#FF3B57',g,'<span class="m">…</span>'); },
     judgeMe(g){ if(rdMyCode) rdReportHit(C,g,rdMyCode); },
     reroll(){ rdMyCode=randCode();
       rdSys('✨ 你的新密碼：'+rdMyCode.join(' ')+'（只有你看得到）',true); },
     dmg(pid,rec){
-      const last=rdLogEl.lastElementChild;
+      const last=lastAtkRowEl;
       const txt = rec.s!==undefined ? '<span class="a">中 '+rec.s+' 個</span>'
         : '<span class="a">'+rec.A+'A</span><span class="b">'+rec.B+'B</span>';
-      if(last&&last.classList.contains('row')) last.lastElementChild.innerHTML=txt;
+      if(last){ const slot=last.querySelector('.lgresult'); if(slot) slot.innerHTML=txt; }
       if(rec.dead){ rdSys('☠ '+rdPName(pid)+' 被擊倒了！',true); sLose(); vib([60,80,60]);
         document.body.classList.add('shake'); setTimeout(()=>document.body.classList.remove('shake'),350); }
       else if(pid===C.st.myPid){ sFoeHit(rec.A||0); vib(12); }
@@ -7876,7 +8063,7 @@ async function rdStartBattle(){
   if(!RD) return;
   const st=RD.st;
   rdEntry=[null,null,null,null]; rdPin=[false,false,false,false]; rdNotes.fill('none'); paintNotes(rdPadEl,rdNotes);
-  rdHealMode=false; rdLogEl.innerHTML='';
+  rdHealMode=false; rdLogEl.innerHTML=''; rdRow.n=0;
   applyTheme('l10'); mountEye('#rdBossEye','l10','rdb');
   $('#rdTbRoom').textContent=rdRoomCode;
   $('#rdTbTier').textContent=RD_TIER_NM[st.tier]||'困難';
@@ -10372,19 +10559,22 @@ function tosSys(t,gold){ const el=document.createElement('div');
      就會得出「A／B 自相矛盾」的結論，而其實只是換了答案。 */
   const isWave=/^>\s*第\s*\d+\s*波/.test(t);
   el.className='sys'+(gold?' gold':'')+(isWave?' wavecut':''); el.textContent=t;
-  $('#tosLog').appendChild(el); $('#tosLog').scrollTop=99999; }
+  mountLog($('#tosLog'),el); }
 function tosRow(g,fb,dmg,before,after){
-  const el=document.createElement('div'); el.className='row obr';
+  const el=document.createElement('div'); el.className='row row2 obr';
   let cut='';
   if(before!=null&&after!=null&&before>after){
     /* 顯示剩餘候選數，玩家才看得出傷害是怎麼來的 */
-    cut='<span class="cut">▼'+(before-after).toLocaleString()+
-        '　餘 '+after.toLocaleString()+'</span>';
+    cut='<span class="lgextra">　▼'+(before-after).toLocaleString()+
+        '　餘'+after.toLocaleString()+'</span>';
   }
-  el.innerHTML='<span class="who" style="color:var(--me)">你</span>'+
-    '<span class="g">'+g.join(' ')+'</span>'+
-    '<span><span class="a">'+fb+'</span><span class="b">'+dmg+'</span>'+cut+'</span>';
-  $('#tosLog').appendChild(el); $('#tosLog').scrollTop=99999;
+  el.innerHTML=logNode(tosRow.n=(tosRow.n||0)+1)+
+    '<span class="lgtag" style="color:var(--me)">你</span>'+
+    '<span class="lgchips">'+logChips(g)+'</span>'+
+    '<span class="lgfill"></span>'+
+    '<span class="lgresult"><span class="lgbadge lga">'+fb+'</span>'+
+      '<span class="lgextra">'+dmg+'</span>'+cut+'</span>';
+  mountLog($('#tosLog'),el);
 }
 function tosNextWave(){
   const B=tosB; B.waveIx++;
@@ -10413,7 +10603,7 @@ function tosNextWave(){
   const cutRate=B.lead==='cut20'?.2:B.lead==='cut10'?.1:0;
   if(cutRate>0) B.pool=B.pool.filter(c=>
     c.join('')===B.foe.code.join('')||Math.random()>cutRate);
-  B.entry=[null,null,null,null]; B.pin=[false,false,false,false]; B.turn=0; B.sight=0; B.busy=false;
+  B.entry=[null,null,null,null]; B.pin=[false,false,false,false]; B.turn=0; B.sight=0; B.busy=false; tosRow.n=0;
   tosNotes.fill('none'); paintNotes($('#tosPad'),tosNotes);
   /* 上一波的猜測是針對別的答案，留在紀錄裡會讓人以為和新題目有關。
      淡化並標記，比直接清空好：玩家還能回看自己怎麼推的。 */
