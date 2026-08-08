@@ -10,8 +10,6 @@
 <link rel="icon" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="天眼之塔">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap');
@@ -26,9 +24,8 @@
   --tc:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;width:100%}
+html{height:100%;overflow:hidden;overscroll-behavior:none}
 body{margin:0;height:100svh;overflow:hidden;overscroll-behavior:none;background:var(--bg);color:var(--ink);
-  position:fixed;inset:0;width:100%;
   font-family:var(--tc);-webkit-font-smoothing:antialiased;overflow-x:hidden;touch-action:manipulation;
   transition:background .6s}
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;transition:background 1s;
@@ -72,11 +69,7 @@ body.shake .wrap{animation:hitShake .32s cubic-bezier(.3,.9,.3,1)}
   16%{opacity:1;transform:scale(1.05);filter:blur(0)}28%{transform:scale(1)}
   78%{opacity:1}100%{opacity:0;transform:scale(1.07)}}
 
-.wrap{position:relative;z-index:2;max-width:440px;margin:0 auto;height:100%;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;
-  /* 安全間距統一只在這一層處理（body 不再加），避免兩層各自計算、疊加算錯。
-     body 本身已經是滿版固定尺寸（position:fixed;inset:0），.wrap 用 padding-top 把
-     內容往下推開瀏海／狀態列，同時用 box-sizing:border-box（全域已設定）確保整體高度不會超出。 */
-  padding-top:env(safe-area-inset-top);
+.wrap{position:relative;z-index:2;max-width:440px;margin:0 auto;height:100svh;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;
   padding:14px 14px calc(20px + env(safe-area-inset-bottom))}
 .screen{display:none;flex-direction:column;gap:12px;animation:scrIn .35s ease}
 .screen.on{display:flex}
@@ -119,15 +112,6 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
   box-shadow:0 0 26px rgba(255,150,80,.2)}
 .bigbtn.alt{font-size:14px;letter-spacing:3px;padding:12px;
   background:rgba(150,150,230,.07);border:1px solid var(--line);box-shadow:none;color:var(--dim)}
-/* Google 登入按鈕：維持與其他 bigbtn 一致的深色霓虹漸層外觀，只保留彩色 G 標誌做辨識，不使用 Google 官方白底樣式（跟遊戲整體風格衝突） */
-.googlebtn{display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;max-width:330px;margin:8px auto 0;padding:14px;border-radius:12px;cursor:pointer;
-  font-family:var(--tc);font-weight:700;font-size:16.5px;letter-spacing:4px;color:#fff;border:1px solid transparent;
-  background:linear-gradient(rgba(12,8,26,.92),rgba(12,8,26,.92)) padding-box,
-             linear-gradient(92deg,var(--me),var(--me2),var(--foe2),var(--foe)) border-box;
-  box-shadow:0 0 26px rgba(120,120,255,.22);transition:.15s}
-.googlebtn:active{transform:scale(.97)}
-.googlebtn .glogo{flex:0 0 auto}
 /* 補給站按鈕：金／琥珀漸層＋掃光，不再是一片灰 */
 .bigbtn.shopbtn{position:relative;overflow:hidden;color:#FFF0C8;
   background:linear-gradient(rgba(26,16,6,.92),rgba(18,11,4,.94)) padding-box,
@@ -517,7 +501,7 @@ body[data-phase="scrBoot"] #bootScene{display:block}
 @keyframes crt{0%{transform:translateY(-15px);opacity:0}12%{opacity:.85}88%{opacity:.85}100%{transform:translateY(15px);opacity:0}}
 .t-l2 .eye{animation:blink 6.5s ease-in-out infinite,crtFlick 4.5s steps(1) infinite}
 @keyframes crtFlick{0%,91%,100%{opacity:1}92%{opacity:.55}93%{opacity:1}95%{opacity:.7}96%{opacity:1}}
-/* L3 双圓框：双環共舞＋双瞳同步搖擺 */
+/* L3 雙圓框：雙環共舞＋雙瞳同步搖擺 */
 .t-l3 .ring1{animation:ringSway 3.6s ease-in-out infinite}
 .t-l3 .ring2{animation:ringSway 3.6s ease-in-out -1.8s infinite}
 @keyframes ringSway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
@@ -2398,24 +2382,20 @@ body[data-phase="scrBoot"] #bootScene{display:block}
       <div class="createeye" id="loginEye"></div>
       <h2>選擇登入方式</h2>
       <p class="desc">建立帳號後，進度、卡片與段位都會安全地跟著你走，換裝置也不會遺失。</p>
-      <button class="googlebtn" id="btnLoginGoogle">
-        <svg class="glogo" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true">
-          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-            s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
-            s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-          <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039
-            l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-          <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
-            c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-          <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-            c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24
-            C44,22.659,43.862,21.35,43.611,20.083z"/>
+      <button class="bigbtn" id="btnLoginGoogle" style="display:flex;align-items:center;justify-content:center;gap:10px">
+        <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" style="flex:none">
+          <path fill="#4285F4" d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4814h4.8436c-.2086 1.125-.8427 2.0782-1.7959 2.7164v2.2581h2.9087c1.7018-1.5668 2.6836-3.874 2.6836-6.615z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.4673-.806 5.9564-2.1805l-2.9087-2.2581c-.8059.54-1.8368.859-3.0477.859-2.344 0-4.3282-1.5831-5.0359-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18z"/>
+          <path fill="#FBBC05" d="M3.9641 10.71c-.18-.54-.2822-1.1168-.2822-1.71s.1023-1.17.2822-1.71V4.9582H.9573A8.9965 8.9965 0 0 0 0 9c0 1.4523.3477 2.827.9573 4.0418L3.9641 10.71z"/>
+          <path fill="#EA4335" d="M9 3.5795c1.3214 0 2.5077.4541 3.4404 1.346l2.5813-2.5814C13.4632.8918 11.426 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582L3.9641 7.29C4.6718 5.1627 6.656 3.5795 9 3.5795z"/>
         </svg>
         <span>使用 Google 登入</span>
       </button>
+      <!-- Facebook 登入尚未在 Firebase 後台開通，先隱藏按鈕，避免玩家點了卻失敗。
+           之後要開通時：Firebase Console → Authentication → 登入方式 → 新增 Facebook 供應商，
+           填好 Meta App ID/Secret 後，把下面這行的 hidden 拿掉即可。 -->
+      <button class="bigbtn" id="btnLoginFacebook" hidden>🔷　使用 Facebook 登入</button>
       <button class="bigbtn alt" id="btnLoginEmail">✉️　使用 Email 註冊 / 登入</button>
-      <button class="tool" id="btnLoginGuest" style="width:100%;margin-top:10px">👤　先玩玩看（訪客模式）</button>
-      <p class="desc" style="font-size:10.5px;opacity:.7;margin-top:6px">訪客模式的進度只存在這台裝置，清除瀏覽器資料或換裝置會遺失，之後仍可在「設定」裡補綁帳號。</p>
       <div class="createerr" id="loginErr" role="alert" aria-live="polite"></div>
     </div>
   </section>
@@ -3181,6 +3161,7 @@ body[data-phase="scrBoot"] #bootScene{display:block}
     <div class="panel" style="padding-top:10px">
       <div class="ptitle" style="padding:0 12px 6px">收藏進度</div>
       <div class="statrow" id="gachaProg"></div>
+	  </div>
     </div>
     <button class="btn sec" id="btnGachaBack2" style="margin-bottom:6px">返回</button>
   </section>
@@ -3330,7 +3311,7 @@ const FIREBASE_CONFIG = {
 };
 /* ▲▲▲ 設定區結束 ▲▲▲ */
 /* USE_FB：多人副本／雲端存檔同步用的即時資料庫（Realtime Database），需要 databaseURL。
-   USE_AUTH：登入功能（Email／Google）只需要 apiKey，跟資料庫是否設定無關——
+   USE_AUTH：登入功能（Email／Google／Facebook）只需要 apiKey，跟資料庫是否設定無關——
    這裡原本誤把兩者綁在一起判斷，導致資料庫沒設定時登入功能也會被誤判成「未設定」。 */
 const USE_FB = !!(FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL && FIREBASE_CONFIG.apiKey);
 const USE_AUTH = !!(FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey);
@@ -3357,15 +3338,19 @@ function initAudio(){
     const Ctx = window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
     AC = new Ctx();
     const comp = AC.createDynamicsCompressor();
+    /* 壓縮器只用來防破音（削掉真正過大的峰值），門檻拉高、比例放輕，
+       不要整段訊號都被往下壓——上一版壓太兇，導致音量開到最大聽起來還是小聲。
+       壓縮器後面再加一個 makeup gain 補回被壓縮吃掉的音量。 */
     try{
-      comp.threshold.setValueAtTime(-20,AC.currentTime);
-      comp.knee.setValueAtTime(14,AC.currentTime);
-      comp.ratio.setValueAtTime(8,AC.currentTime);
+      comp.threshold.setValueAtTime(-10,AC.currentTime);
+      comp.knee.setValueAtTime(6,AC.currentTime);
+      comp.ratio.setValueAtTime(4,AC.currentTime);
       comp.attack.setValueAtTime(.003,AC.currentTime);
-      comp.release.setValueAtTime(.28,AC.currentTime);
+      comp.release.setValueAtTime(.22,AC.currentTime);
     }catch(e){}
+    const makeup = AC.createGain(); makeup.gain.value = 1.6;
     MASTER = AC.createGain(); MASTER.gain.value = LS.get('volume',90)/100;
-    MASTER.connect(comp); comp.connect(AC.destination);
+    MASTER.connect(comp); comp.connect(makeup); makeup.connect(AC.destination);
     if(AC.state==='suspended') AC.resume();
     const b = AC.createBuffer(1,1,22050), s = AC.createBufferSource();
     s.buffer=b; s.connect(AC.destination); s.start(0);
@@ -3454,6 +3439,10 @@ const MUSIC_TRACKS = {
             chords:[[65.4,77.8,98.0],[61.7,73.4,92.5],[58.3,69.3,87.3],[61.7,73.4,92.5]] },
 };
 let musicBus=null, musicGen=0, musicTimer=null, curTrackName=null, desiredTrack=null;
+/* 切換配樂時，舊和弦要立刻淡出，不能拖到舊軌下一小節才停——
+   否則新舊兩軌的和弦會疊在一起響好幾秒，聽起來就是那種刺耳、詭異的破音感。
+   改成用「全域」的 padOscs 陣列（而不是每次 startMusicTrack 各自封閉在自己的閉包裡），
+   這樣新軌一啟動就能立刻抓到舊軌還在響的音源、快速淡掉。 */
 let musicPadOscs=[];
 function ensureMusicBus(){
   if(!AC||!MASTER) return null;
@@ -3484,7 +3473,7 @@ function stopMusicPad(padOscs,fadeSec){
 function startMusicTrack(name){
   const bus=ensureMusicBus(); if(!bus) return;
   clearTimeout(musicTimer);
-  stopMusicPad(musicPadOscs,.35);
+  stopMusicPad(musicPadOscs,.35); /* 立刻把上一軌還在響的和弦快速淡出，避免新舊兩軌疊在一起變成噪音 */
   musicGen++; const myGen=musicGen; curTrackName=name;
   const cfg=MUSIC_TRACKS[name]; if(!cfg) return;
   const t0=AC.currentTime;
@@ -3504,8 +3493,8 @@ function startMusicTrack(name){
     });
   }
   function scheduleBar(){
-    if(myGen!==musicGen) return;
-    if(!ready()) return;
+    if(myGen!==musicGen) return; // 已被新軌取代，和弦交給呼叫端(startMusicTrack)去快速淡出，這裡不用再管
+    if(!ready()) return; // 靜音／未解鎖時暫停排程，之後由 wantMusic() 重新啟動
     const chord=cfg.chords[barIdx%cfg.chords.length];
     startPad(chord);
     for(let s=0;s<cfg.steps;s++){
@@ -3573,7 +3562,11 @@ document.querySelectorAll('.sndbtn').forEach(b=>b.onclick=()=>{
 });
 function unlock(){ initAudio(); setSoundUI(); if(desiredTrack) wantMusic(desiredTrack); }
 ['pointerdown','touchstart','keydown'].forEach(ev=>window.addEventListener(ev,unlock,{once:true,passive:true}));
-document.addEventListener('visibilitychange',()=>{ if(!document.hidden && AC && AC.state==='suspended') AC.resume(); });
+document.addEventListener('visibilitychange',()=>{
+  if(!AC) return;
+  if(document.hidden){ if(AC.state==='running') AC.suspend(); }
+  else if(AC.state==='suspended') AC.resume();
+});
 
 /* ================= 核心邏輯 ================= */
 /* A／B 判定。全遊戲只有這一份實作。
@@ -4167,7 +4160,7 @@ const LEVELS=[
   sloppy:.65, scans:2},
  {en:'WARDEN',   nm:'看守',   theme:'l2', desc:'方形 CRT 監控螢幕的化身，綠色掃描線來回逡巡。開始認真推理，但仍有一半時間在分心。',
   sloppy:.50, scans:2},
- {en:'GEMINI',   nm:'双子',   theme:'l3', desc:'双圓交疊的紫瞳演算體，兩顆瞳孔共舞。每逢第 3 回合，它會連續發動兩次攻擊。',
+ {en:'GEMINI',   nm:'雙子',   theme:'l3', desc:'雙圓交疊的紫瞳演算體，兩顆瞳孔共舞。每逢第 3 回合，它會連續發動兩次攻擊。',
   sloppy:.40, scans:2, boss:'gemini'},
  {en:'HUNTER',   nm:'獵手',   theme:'l4', desc:'杏形獸眼、緋紅豎瞳，急躁而敏銳。失誤明顯減少，推理鏈開始收緊。',
   sloppy:.30, scans:2},
@@ -4201,7 +4194,7 @@ const LEVELS=[
   sloppy:0, minimax:true, scans:1},
  {en:'ORACLE',   nm:'神諭',   theme:'l19', desc:'六芒稜鏡折射出所有可能的未來。最佳化演算＋先制攻擊，它早已看過這場對局。',
   sloppy:0, minimax:true, scans:2, aiFirst:true},
- {en:'OMEGA',    nm:'終焉',   theme:'l20', desc:'無限環中的金色虛空 —— 天眼之塔的最後一道意志。完美演算、先制、且每 3 回合双重攻擊。反抗軍傾盡全力為你偷來一段情報。',
+ {en:'OMEGA',    nm:'終焉',   theme:'l20', desc:'無限環中的金色虛空 —— 天眼之塔的最後一道意志。完美演算、先制、且每 3 回合雙重攻擊。反抗軍傾盡全力為你偷來一段情報。',
   sloppy:0, minimax:true, scans:2, aiFirst:true, freeIntel:true, boss:'gemini'},
 ];
 const CODES=[null,null,'K7X2','F4R9','M3G1','T8H5','D2J6','H9P3','X5E8','N1V7','S6B4',
@@ -4391,7 +4384,7 @@ function applySnapshot(d){
     mountEye('#titleEye',wallet.equip,'t0','none');
   }catch(e){}
 }
-/* ---- 登入方式（Email／Google）----
+/* ---- 登入方式（Email／Google／Facebook）----
    Firebase 專案目前尚未申請（FIREBASE_CONFIG 是空的，見上方設定區），
    所以這裡先做完整的 UI／流程骨架：按鈕呼叫的是真正的 Firebase Auth API，
    等 config 填好就能直接運作，不需要再改這段程式碼。
@@ -4401,6 +4394,8 @@ function applySnapshot(d){
    要做需要另外寫一個小型後端（Cloud Function）跟 LINE 換 token 再轉成
    Firebase 自訂憑證，等於把專案從純前端變成需要後端，先不在這次範圍內。 */
 let AUTH_READY=null;
+/* 載入單一個 Firebase compat SDK 腳本，附上逾時保護。
+   抽成共用函式，避免 ensureAuthReady() 跟 cloudInit() 各寫一份、邏輯兜不起來。 */
 function loadFbScript(src,timeoutMs){
   return new Promise((res,rej)=>{
     const to=setTimeout(()=>rej(new Error('Firebase SDK 載入逾時，請檢查網路連線後再試一次。')), timeoutMs||10000);
@@ -4415,8 +4410,10 @@ function ensureAuthReady(){
   if(AUTH_READY) return AUTH_READY;
   AUTH_READY=(async()=>{
     if(!USE_AUTH) throw new Error('Firebase 尚未設定，登入功能無法使用（請洽管理者完成 Firebase 專案設定）。');
-    /* 修正：不能只載入 firebase-auth-compat.js，要先確保核心庫 firebase-app-compat.js
-       也載入完成，不然如果使用者手腳快、雲端存檔那段還沒載入好，會出現 firebase is not defined。 */
+    /* 修正：原本這裡只載入 firebase-auth-compat.js，卻假設 firebase-app-compat.js（核心程式庫）
+       已經被 cloudInit() 在背景載入好了。如果使用者在那段還沒跑完前就先點登入／註冊，
+       firebase 這個全域物件根本還不存在，auth-compat.js 掛不上去，就會出現
+       「firebase is not defined」。這裡改成自己負責把核心庫也一起確保載入完成，不再依賴別處的時機。 */
     if(!window.firebase){
       await loadFbScript('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js', window.__authSdkTimeoutMs);
     }
@@ -4431,111 +4428,71 @@ function ensureAuthReady(){
 }
 function loginSetErr(sel,msg){ const e=$(sel); if(e) e.textContent=msg||''; }
 function loginBusyToggle(busy){
-  ['#btnLoginGoogle','#btnLoginEmail','#btnLoginGuest','#btnLoginFormGo','#btnLoginVerifyCheck','#btnLoginVerifyResend']
+  ['#btnLoginGoogle','#btnLoginFacebook','#btnLoginEmail','#btnLoginFormGo','#btnLoginVerifyCheck','#btnLoginVerifyResend']
     .forEach(sel=>{ const b=$(sel); if(b) b.disabled=busy; });
 }
 /* 登入／註冊成功的共同出口：記住帳號，還沒取暱稱的話進角色建立，否則直接進標題。
    既有存檔已經有 name 的玩家（登入功能上線前的舊使用者）不受這條路徑影響，
    bootDone() 一開始就會把他們攔下來，不會被要求重新登入。 */
-async function cloudBind(user){
-  try{
-    acctSet('sync','連線中');
-    CLOUD.uid=user.uid;
-    CLOUD.ref=firebase.database().ref('players/'+CLOUD.uid);
-    const snap=await CLOUD.ref.once('value');
-    const cloudData=snap.val();
-    const localTs=account.ts||0;
-    if(!cloudData) await CLOUD.ref.set(localSnapshot());
-    else if((cloudData.ts||0)>=localTs) applySnapshot(cloudData);
-    else await CLOUD.ref.set(localSnapshot());
-    CLOUD.ready=true;
-    acctSet('on','已同步 ☁');
-    return cloudData;
-  }catch(e){ CLOUD.ready=false; acctSet('','離線·本機存檔'); return null; }
-}
 async function onAuthSuccess(user){
   LS.set('uid',user.uid);
-  LS.set('authProvider', user.isAnonymous ? 'anonymous' : ((user.providerData&&user.providerData[0]&&user.providerData[0].providerId)||'password'));
+  LS.set('authProvider',(user.providerData&&user.providerData[0]&&user.providerData[0].providerId)||'password');
   LS.set('authEmail',user.email||'');
-  if(USE_FB){ try{ await cloudBind(user); }catch(e){} }
+  /* 登入成功後，把雲端存檔的路徑改綁到「這個真實帳號」的 uid 上，
+     不要再繼續用 cloudInit() 一開始建立的匿名訪客 uid，
+     否則帳號系統跟雲端存檔系統會各自指向不同的資料節點，
+     之後「刪除帳號」也會刪錯地方。 */
+  if(USE_FB){
+    try{
+      CLOUD.uid=user.uid;
+      CLOUD.ref=firebase.database().ref('players/'+user.uid);
+      const snap=await CLOUD.ref.once('value');
+      const cloudData=snap.val();
+      const localTs=account.ts||0;
+      if(!cloudData) await CLOUD.ref.set(localSnapshot());
+      else if((cloudData.ts||0)>localTs) applySnapshot(cloudData);
+      else await CLOUD.ref.set(localSnapshot());
+      CLOUD.ready=true;
+      acctSet('on','已同步 ☁');
+    }catch(e){ /* 綁定失敗就先維持本機存檔,不影響登入本身 */ }
+  }
   const hasName=!!((LS.get('name','')||'').trim());
   if(hasName){ sGood(3); show('scrTitle'); return; }
   mountEye('#createEye',wallet.equip,'cr0');
   sGood(3); show('scrCreate');
   setTimeout(()=>{ const n=$('#crName'); if(n) n.focus(); },60);
 }
-/* 判斷是不是跑在 Capacitor 包出來的原生 App 裡（而不是一般瀏覽器），
-   包成 App 後 Capacitor 會自動把 window.Capacitor 注入頁面，網頁版測試不受影響。 */
+/* 判斷目前是不是跑在 Capacitor 包出來的原生 App 裡（而不是一般瀏覽器）。
+   包成 App 後，Capacitor 會自動把 window.Capacitor 這個物件注入到頁面裡，
+   所以網頁版完全不受影響，這行判斷平常瀏覽器測試時一定是 false。 */
 function isNativeApp(){
   return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-}
-/* 判斷目前是不是手機瀏覽器（不是原生 App）。手機瀏覽器上彈窗登入（signInWithPopup）
-   常常不穩定（尤其 iOS Safari／已加入主畫面的狀態），改用整頁跳轉（signInWithRedirect）
-   穩定很多，跳轉回來後由 checkRedirectLogin() 接手完成登入。 */
-function isMobileWeb(){
-  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
 }
 async function loginWithProvider(kind){
   loginSetErr('#loginErr','');
   loginBusyToggle(true);
   try{
-    /* App 版：走手機系統原生登入視窗（需要 @capacitor-firebase/authentication 外掛）。
-       原生外掛登入成功後會自動同步回 firebase.auth()，下面 onAuthSuccess() 拿到的 user 物件一樣可用。 */
+    /* App 版：走手機系統原生的登入視窗（需要先裝 @capacitor-firebase/authentication 外掛，
+       第三步會教怎麼裝）。原生外掛登入成功後，會自動把結果同步回 firebase.auth()，
+       所以下面 onAuthSuccess() 一樣能拿到同一個 user 物件，其他邏輯完全不用改。 */
     if(isNativeApp() && window.Capacitor.Plugins && window.Capacitor.Plugins.FirebaseAuthentication){
       const FA=window.Capacitor.Plugins.FirebaseAuthentication;
-      await FA.signInWithGoogle();
+      if(kind==='google') await FA.signInWithGoogle();
+      else await FA.signInWithFacebook();
       await ensureAuthReady();
       const user=firebase.auth().currentUser;
       if(!user) throw new Error('登入完成，但讀不到使用者資訊，請再試一次。');
       await onAuthSuccess(user);
       return;
     }
+    /* 網頁版（一般瀏覽器）：維持原本的彈窗登入，測試遊戲時走這條路徑。 */
     const auth=await ensureAuthReady();
-    if(isMobileWeb()){
-      /* 整頁跳轉去 Google 登入，這個函式呼叫完頁面就會離開，
-         不會走到下面的 onAuthSuccess()，回來後交給 checkRedirectLogin() 處理。
-         iOS「加入主畫面」的獨立模式有時候不會真的重新整理頁面、而是把畫面凍結，
-         導致這個 await 永遠不會被真正解開、按鈕卡在鎖定狀態——加一個保險的逾時，
-         幾秒後強制把按鈕解鎖，讓使用者至少能重新操作，不會整個卡死。 */
-      setTimeout(()=>loginBusyToggle(false), 4000);
-      await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
-      return;
-    }
-    const cred=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    const Provider=kind==='google'?firebase.auth.GoogleAuthProvider:firebase.auth.FacebookAuthProvider;
+    const cred=await auth.signInWithPopup(new Provider());
     await onAuthSuccess(cred.user);
   }catch(e){
     loginSetErr('#loginErr', (e&&e.message)||'登入失敗，請稍後再試。');
   }finally{ loginBusyToggle(false); }
-}
-/* 從 Google 整頁跳轉登入回來後，接手把登入結果走完剩下流程。
-   一定要在頁面一開始就呼叫（不能等使用者點按鈕），因為跳轉回來時使用者還沒做任何動作。 */
-/* 訪客模式：直接沿用頁面載入時 cloudInit() 已經建立好的匿名帳號（Firebase Anonymous Auth），
-   不用另外選登入方式，最快能進遊戲。之後想要換裝置不遺失進度，可以在「設定」裡再補綁 Email／Google。 */
-async function loginAsGuest(){
-  loginSetErr('#loginErr','');
-  loginBusyToggle(true);
-  try{
-    const auth=await ensureAuthReady();
-    let user=auth.currentUser;
-    if(!user){ const cred=await auth.signInAnonymously(); user=cred.user; }
-    await onAuthSuccess(user);
-  }catch(e){
-    loginSetErr('#loginErr', (e&&e.message)||'訪客登入失敗，請稍後再試。');
-  }finally{ loginBusyToggle(false); }
-}
-async function checkRedirectLogin(){
-  if(!isMobileWeb() || isNativeApp()) return;
-  try{
-    const auth=await ensureAuthReady();
-    const result=await auth.getRedirectResult();
-    if(result && result.user){ await onAuthSuccess(result.user); }
-  }catch(e){
-    /* auth/no-auth-event 這類代表「本來就沒有待處理的跳轉登入」，是正常情況，安靜略過；
-       其他真正的錯誤才顯示出來，方便玩家/自己排查問題，不要整個吞掉看不見。 */
-    if(e && e.code && e.code!=='auth/no-auth-event'){
-      loginSetErr('#loginErr', '登入時發生問題：'+(e.message||e.code));
-    }
-  }
 }
 let LOGIN_FORM_MODE='signup';   // 'signup' ｜ 'login'
 function loginFormRenderMode(){
@@ -4557,10 +4514,10 @@ function pwIssue(pw,pw2){
   return '';
 }
 (function initLoginScreens(){
-  const btnG=$('#btnLoginGoogle'), btnE=$('#btnLoginEmail'), btnGuest=$('#btnLoginGuest');
+  const btnG=$('#btnLoginGoogle'), btnF=$('#btnLoginFacebook'), btnE=$('#btnLoginEmail');
   if(!btnG) return;
   btnG.onclick=()=>loginWithProvider('google');
-  if(btnGuest) btnGuest.onclick=loginAsGuest;
+  btnF.onclick=()=>loginWithProvider('facebook');
   btnE.onclick=()=>{
     LOGIN_FORM_MODE='signup'; loginFormRenderMode(); loginSetErr('#loginFormErr','');
     $('#loginFormEmail').value=''; $('#loginFormPw').value=''; $('#loginFormPw2').value='';
@@ -4790,6 +4747,7 @@ function shardBreak(id,cnt){
 }
 function addCredits(n){
   if(!(n>0)) return;
+  n=Math.round(n*100);                            /* 金幣掉落統一 x30 */
   if(own('u_credit')) n=Math.round(n*1.2);       /* 交易許可 */
   wallet.credits=Math.min(9999999,wallet.credits+n);
   saveWallet(); paintWallet();
@@ -4864,16 +4822,7 @@ function applyTheme(key){
 /* ================= 眼睛掛載＋瞳孔追蹤 ================= */
 mountEye('#titleEye',wallet.equip,'t0','none');
 paintWallet(); paintAcct();
-/* iOS「加入主畫面」的獨立模式下，CSS 的 overflow:hidden／position:fixed 常常攔不住
-   整頁被手指拖拉彈跳的問題（iOS 已知的老毛病），改用 JS 直接攔截手勢：
-   除非手指是在真正該捲動的區域內（.wrap 或其他標記可捲動的元素），
-   否則一律擋掉，避免整個網頁像照片一樣被拖來拖去。 */
-document.addEventListener('touchmove', function(e){
-  const scrollable = e.target.closest('.wrap, [data-scrollable], textarea, input');
-  if(!scrollable) e.preventDefault();
-}, { passive:false });
 cloudInit();
-checkRedirectLogin();
 mountEye('#eyebox','l0','bt');
 mountEye('#introEye','l0','iv');
 const eyebox=$('#eyebox');
@@ -5016,22 +4965,17 @@ function runBoot(){
   const p=video.play();
   if(p&&p.catch) p.catch(()=>{ /* 部分瀏覽器擋自動播放時，畫面留在第一格靜止畫面，玩家仍可按跳過 */ });
 }
-async function bootDone(){
-  let hasName=!!((LS.get('name','')||'').trim());
-  if(hasName){ show('scrTitle'); return; }
+function bootDone(){
+  const hasName=!!((LS.get('name','')||'').trim());
+  if(hasName){ show('scrTitle'); return; }   // 既有存檔（含登入功能上線前的舊玩家）直接進標題，不受影響
   const hasUid=!!((LS.get('uid','')||''));
-  if(hasUid){
-    for(let i=0;i<25&&!hasName;i++){
-      await wait(100);
-      hasName=!!((LS.get('name','')||'').trim());
-    }
-    if(hasName){ show('scrTitle'); return; }
+  if(hasUid){    // 已經登入過、但還沒取暱稱（例如登入到一半離開），跳過登入直接建角色
     mountEye('#createEye',wallet.equip,'cr0');
     show('scrCreate');
     setTimeout(()=>{ const n=$('#crName'); if(n) n.focus(); },60);
     return;
   }
-  mountEye('#loginEye',wallet.equip,'lg0');
+  mountEye('#loginEye',wallet.equip,'lg0');    // 全新玩家：先選登入方式
   show('scrLogin');
 }
 
@@ -5093,7 +5037,6 @@ function nameIssue(raw){
     if(!validate()) return;
     const name=nm.value.trim().slice(0,8);
     LS.set('name',name);
-    cloudPush();
     sGood(3); vib([12,18,12]);
     show('scrTitle');
   };
@@ -5156,7 +5099,7 @@ function renderMap(){
 function chipsFor(L){
   const c=[];
   if(L.aiFirst) c.push(['⚡ 敵方先制攻擊']);
-  if(L.boss==='gemini') c.push(['◆ 每 3 回合双重攻擊']);
+  if(L.boss==='gemini') c.push(['◆ 每 3 回合雙重攻擊']);
   if(L.boss==='phantom') c.push(['▓ 敵方情報全面遮蔽']);
   if(L.minimax) c.push(['∞ 最佳化演算法']);
   if(L.scans===1) c.push(['🔍 掃描配額 ×1']);
@@ -5297,7 +5240,7 @@ async function foeTurn(){
   await wait(reduced?200:1400);
   clearInterval(sIv); stream.classList.remove('on'); eyebox.classList.remove('think');
   const strikes = (cfg.boss==='gemini' && round%3===0) ? 2 : 1;
-  if(strikes===2){ foeStat.textContent='TWIN CORE ACTIVE'; sysLine('> ◆ 双子啟動双重演算！'); sBoss(); }
+  if(strikes===2){ foeStat.textContent='TWIN CORE ACTIVE'; sysLine('> ◆ 雙子啟動雙重演算！'); sBoss(); }
   for(let i=0;i<strikes;i++){
     if(await foeStrike(round)){ defeat(); return false; }
     if(i<strikes-1) await wait(reduced?150:750);
@@ -5519,7 +5462,7 @@ function showSettings(){
   let acctLabel='本機存檔（尚未登入雲端帳號）';
   if(uid){
     if(provider==='google.com') acctLabel='已登入　Google 帳號'+(email?'　'+email:'');
-    else if(provider==='anonymous') acctLabel='訪客模式（進度只存在這台裝置）';
+    else if(provider==='facebook.com') acctLabel='已登入　Facebook 帳號'+(email?'　'+email:'');
     else acctLabel='已登入　Email 帳號'+(email?'　'+email:'');
   }
   const vol=LS.get('volume',90);
@@ -5578,7 +5521,9 @@ async function doLogout(){
   LS.set('uid',''); LS.set('authProvider',''); LS.set('authEmail',''); LS.set('name','');
   location.reload();
 }
-/* ---- 刪除帳號（Google Play／App Store 政策要求：有註冊帳號就必須提供刪除功能）---- */
+/* ---- 刪除帳號（Google Play／App Store 政策要求：有註冊帳號就必須提供刪除功能）----
+   會做三件事：1) 刪除雲端存檔資料　2) 刪除 Firebase Auth 帳號本身　3) 清空本機存檔。
+   若 Firebase 要求「最近才登入過」才能刪除帳號（安全機制），會提示使用者重新登入一次再試。 */
 async function deleteAccountConfirmed(){
   const btn=$('#btnDelAcct');
   if(btn){ btn.disabled=true; btn.textContent='刪除中…'; }
@@ -9656,7 +9601,7 @@ const CARDS=[
  {id:'l0', nm:'天眼原型', el:'dark', st:2, atk:38, hp:210, ld:'none',   ac:'scan'},
  {id:'l1', nm:'哨兵',     el:'fire', st:2, atk:42, hp:190, ld:'none',   ac:'scan'},
  {id:'l2', nm:'看守',     el:'wood', st:2, atk:40, hp:225, ld:'none',   ac:'guard'},
- {id:'l3', nm:'双子',     el:'dark', st:3, atk:56, hp:240, ld:'atk30',  ac:'halve'},
+ {id:'l3', nm:'雙子',     el:'dark', st:3, atk:56, hp:240, ld:'atk30',  ac:'halve'},
  {id:'l4', nm:'獵手',     el:'fire', st:3, atk:62, hp:215, ld:'atk30',  ac:'burst'},
  {id:'l5', nm:'審判',     el:'light',st:3, atk:54, hp:265, ld:'hp30',   ac:'guard'},
  {id:'l6', nm:'幻影',     el:'water',st:3, atk:58, hp:230, ld:'cut20',  ac:'sight'},
