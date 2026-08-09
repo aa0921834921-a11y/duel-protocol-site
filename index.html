@@ -7613,7 +7613,11 @@ async function obStartBattle(){
   $('#obTbRoom').textContent=obRoom;
   $('#obPeerStat').textContent='CONNECTED';
   $('#obVsL').textContent=pn+' 攻擊中';
-  $('#scrOnlineBattle').style.setProperty('--pc',THEMES[OBC.me.avatar].c1);
+  /* 修正：這裡原本會用玩家自己選的眼睛顏色（THEMES[OBC.me.avatar].c1）去設定 --pc，
+     把整個攻擊主控台鍵盤染成對應色。但其他戰鬥畫面（單人闖關、天梯戰、組隊突襲）
+     從沒設定過 --pc，鍵盤一律用 CSS 預設的青綠色，導致好友對戰在玩家選了非預設眼睛時
+     鍵盤色調跟其他畫面看起來不一致（例如選紅色眼睛整片鍵盤變紅）。拿掉這行讓好友對戰
+     跟其他戰鬥畫面統一使用預設色。 */
   document.body.classList.remove('danger','scanning');
   show('scrOnlineBattle');
   obSys('> 連線對戰開始 · 房號 '+obRoom);
