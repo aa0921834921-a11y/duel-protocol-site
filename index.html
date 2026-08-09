@@ -4681,6 +4681,15 @@ function ensureAuthReady(){
     if(!(window.firebase&&firebase.auth)){
       await loadFbScript('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js', window.__authSdkTimeoutMs);
     }
+    /* 修正：onAuthSuccess() 登入成功後會呼叫 firebase.database() 把帳號綁到雲端存檔，
+       但這裡原本只確保載入了 app/auth 兩支 SDK，從沒載入 database-compat.js。
+       如果玩家是第一次登入、還沒進過好友對戰／組隊突襲（那邊才會另外載入 database SDK），
+       firebase.database 這個函式根本不存在，onAuthSuccess() 就會整段 throw
+       「firebase.database is not a function」，被外層 catch 吞掉，CLOUD.ready 永遠是 false，
+       之後所有 cloudPush() 都會直接中止——暱稱等資料就永遠上不了雲端。這裡補齊。 */
+    if(!(window.firebase&&firebase.database)){
+      await loadFbScript('https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js', window.__authSdkTimeoutMs);
+    }
     if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     return firebase.auth();
   })();
