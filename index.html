@@ -9932,8 +9932,8 @@ const TASK_NAV={
   win:()=>{ taskReturnActive=true; obRenderAv();
     if(!$('#obName').value) $('#obName').value=LS.get('name','')||'';
     mountEye('#obPreview',obAvatar,'op'); $('#obErr').textContent=''; show('scrOnline'); },
-  tower:()=>{ taskReturnActive=true; dunOpen('solo'); },
-  raid:()=>{ taskReturnActive=true; dunOpen('solo'); },
+  tower:()=>{ taskReturnActive=true; renderMap(); show('scrMap'); },
+  raid:()=>{ taskReturnActive=true; dunOpen(); },
   gacha:()=>{ taskReturnActive=true; applyTheme('l0'); renderGacha(); show('scrGacha'); },
   break:()=>{ taskReturnActive=true; renderBag(); show('scrBag'); }
 };
