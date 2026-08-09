@@ -2755,7 +2755,8 @@ body[data-phase="scrBoot"] #bootScene{display:block}
     </div>
     <div class="setupcard panel p-me">
       <p class="desc"><br>新建<b>房間</b>並取得房號，好友<b>輸入房號</b>即可加入</p>
-      <input class="nameinput" id="obName" maxlength="8" placeholder="你的暱稱（可留空）">
+      <input class="nameinput" id="obName" maxlength="8" placeholder="你的暱稱" readonly>
+      <p class="desc" style="margin-top:-4px;opacity:.7;font-size:.85em">暱稱與帳號同步，如需更改請至角色設定</p>
       <div class="avlabel">選擇你的眼睛</div>
       <div class="avrow" id="obAvRow"></div>
       <div class="pvpreview" id="obPreview"></div>
@@ -7359,10 +7360,14 @@ function renderAvPicker(rowSel,previewSel,uidPfx){
 }
 function obRenderAv(){ renderAvPicker('#obAvRow','#obPreview','avob'); }
 $('#btnOnline').onclick=()=>{ sHotEnter(); vib(12); obRenderAv();
-  if(!$('#obName').value) $('#obName').value=LS.get('name','')||'';
+  $('#obName').value=LS.get('name','')||'';
   mountEye('#obPreview',obAvatar,'op'); $('#obErr').textContent=''; show('scrOnline'); };
 $('#btnObBack').onclick=()=>{ if(taskReturnGo())return; sBack(); show('scrTitle'); };
-function obMyName(){ const v=$('#obName').value.trim(); const n=v?v.slice(0,8):'玩家'; LS.set('name',n); return n; }
+/* 修正：這裡原本會 LS.set('name',n)，把好友對戰畫面「單場暫用」的暱稱欄位
+   直接覆寫成帳號的正式暱稱（還會被 cloudPush 同步上雲端），導致玩家在這裡
+   隨手改個字，離開重進、甚至登出登入後，帳號名稱都被換掉。
+   比照組隊突襲的 rdMyName()：只讀這個欄位當這場對戰用的顯示名稱，不動帳號本身。 */
+function obMyName(){ return LS.get('name','')||'玩家'; }
 async function obEnterRoom(role,code){
   $('#obErr').textContent='';
   const btnH=$('#btnObHost'), btnJ=$('#btnObJoin');
@@ -9943,7 +9948,7 @@ function taskReturnGo(){
 }
 const TASK_NAV={
   win:()=>{ taskReturnActive=true; obRenderAv();
-    if(!$('#obName').value) $('#obName').value=LS.get('name','')||'';
+    $('#obName').value=LS.get('name','')||'';
     mountEye('#obPreview',obAvatar,'op'); $('#obErr').textContent=''; show('scrOnline'); },
   tower:()=>{ taskReturnActive=true; renderMap(); show('scrMap'); },
   raid:()=>{ taskReturnActive=true; dunOpen(); },
