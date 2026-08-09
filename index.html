@@ -7495,6 +7495,23 @@ $('#btnObLeave1').onclick=()=>{ sBack(); obQuit(); };
 
 /* --- 對戰 --- */
 const obLogEl=$('#obLog'), obEntryCellsEl=$('#obEntryCells'), obPadEl=$('#obPad');
+let obBestClueRow=null, obBestClueVal=0, obLastMyCount=5040;
+/* 好友對戰版的「最佳線索」——邏輯跟單人闖關的 markBestClue()/pinBestClue() 一樣，
+   但用自己一組獨立的狀態，不跟單人闖關共用 bestClueRow/bestClueVal，
+   避免兩邊互相污染（例如剛打完單人闖關又進好友對戰，殘留的高數值會讓新對戰永遠標不出最佳線索）。 */
+function obMarkBestClue(el,cutVal){
+  if(!el||!(cutVal>obBestClueVal)) return;
+  if(obBestClueRow){
+    obBestClueRow.classList.remove('best-clue');
+    const old=obBestClueRow.querySelector('.lgbest'); if(old) old.remove();
+  }
+  obBestClueVal=cutVal; obBestClueRow=el; el.classList.add('best-clue');
+  const tag=document.createElement('span'); tag.className='lgbest';
+  tag.textContent='最佳線索 -'+cutVal.toLocaleString();
+  const fillSlot=el.querySelector('.lgfill');
+  if(fillSlot) el.insertBefore(tag,fillSlot); else el.appendChild(tag);
+  pinBestClue(el);
+}
 let obEntry=[null,null,null,null], obPin=[false,false,false,false], obNotes=makeNotes(), obScanMode=false;
 buildPad(obPadEl,obDigit,obBack,obExec,'攻擊<small>ATTACK</small>',obNotes);
 bindCellPin(obEntryCellsEl,()=>obEntry,()=>obPin,()=>!!(OBC&&!OBC.st.over),()=>obPaintBattle());
@@ -7505,14 +7522,15 @@ function obMyTurn(){ return !!(OBC&&OBC.st.ph==='battle'&&!OBC.st.over&&
 function obSys(t,gold){ const el=document.createElement('div');
   el.className='sys'+(gold?' gold':''); el.textContent=t;
   mountLog(obLogEl,el); }
-function obRow(name,color,g,A,B){
-  const el=document.createElement('div'); el.className='row row2 obr'+(A===4?' hit':'');
+function obRow(name,color,g,A,B,isFoe){
+  const el=document.createElement('div'); el.className='row row2 obr'+(isFoe?' foe':' me')+(A===4?' hit':'');
   el.innerHTML=logNode(obRow.n=(obRow.n||0)+1)+
     '<span class="lgtag" style="color:'+color+'">'+esc(name)+'</span>'+
     '<span class="lgchips">'+logChips(g)+'</span>'+
     '<span class="lgfill"></span>'+
     '<span class="lgresult">'+logBadges(A,B)+'</span>';
   mountLog(obLogEl,el);
+  return el;
 }
 function obPaintBattle(){
   if(!OBC) return;
@@ -7571,18 +7589,22 @@ function obBindUI(C){
     turn(){ if(phase==='scrOnlineBattle'){ obPaintBattle();
       if(obMyTurn()){ sGood(2); vib([12,20,12]); } } },
     theirGuess(g,A,B){
-      obRow(C.peer?C.peer.name:'對手',THEMES[peerAv()].c1,g,A,B);
+      obRow(C.peer?C.peer.name:'對手',THEMES[peerAv()].c1,g,A,B,true);
       sFoeHit(A); vib(A>=2?[25,40,25]:12);
       if(A>=3&&A<4){ document.body.classList.add('shake');
         setTimeout(()=>document.body.classList.remove('shake'),350); }
       obPaintBattle(); },
     myRes(g,A,B){
-      obRow('你',THEMES[C.me.avatar].c1,g,A,B);
+      const rowEl=obRow('你',THEMES[C.me.avatar].c1,g,A,B);
+      const afterN=obCountFrom(OBC.st.myHist,OBC.st.myScanInfo);
+      obMarkBestClue(rowEl,obLastMyCount-afterN);
+      obLastMyCount=afterN;
       if(A<4){ (A===0&&B===0)?sMiss():sGood(A); }
       obPaintBattle(); },
     theirScan(d,inc){ obSys('> 對手掃描了數字 '+d+' → '+(inc?'存在！':'不存在')); sScan(); obPaintBattle(); },
     myScanRes(d,inc){
       obSys(inc?('> 掃描結果：'+d+' 存在於對方密碼中！'):('> 掃描結果：'+d+' 不在對方密碼中'));
+      obLastMyCount=obCountFrom(OBC.st.myHist,OBC.st.myScanInfo);
       inc?sGood(2):sMiss(); obPaintBattle(); },
     gameover(){ obGameOver(); },
     reveal(){ if(OBC&&OBC.st.over&&!overlay.hidden) obShowEnd(); },
@@ -7603,6 +7625,7 @@ async function obStartBattle(){
   const st=OBC.st;
   obEntry=[null,null,null,null]; obPin=[false,false,false,false]; obNotes.fill('none'); paintNotes(obPadEl,obNotes);
   obScanMode=false; obLogEl.innerHTML=''; obRow.n=0;
+  obBestClueRow=null; obBestClueVal=0; obLastMyCount=5040;
   const pav=(OBC.peer&&OBC.peer.avatar in THEMES)?OBC.peer.avatar:'l0';
   applyTheme(pav);
   mountEye('#obEye',pav,'ob');
