@@ -2511,7 +2511,7 @@ body[data-phase="scrBoot"] #bootScene{display:block}
            之後要開通時：Firebase Console → Authentication → 登入方式 → 新增 Facebook 供應商，
            填好 Meta App ID/Secret 後，把下面這行的 hidden 拿掉即可。 -->
       <button class="bigbtn" id="btnLoginFacebook" hidden>🔷　使用 Facebook 登入</button>
-      <button class="bigbtn alt" id="btnLoginEmail">✉️　使用 Email 註冊 / 登入</button>
+      <button class="bigbtn alt" id="btnLoginEmail">✉️　使用 Email 登入 / 註冊</button>
       <div class="createerr" id="loginErr" role="alert" aria-live="polite"></div>
     </div>
   </section>
@@ -4789,7 +4789,7 @@ function pwIssue(pw,pw2){
   btnG.onclick=()=>loginWithProvider('google');
   btnF.onclick=()=>loginWithProvider('facebook');
   btnE.onclick=()=>{
-    LOGIN_FORM_MODE='signup'; loginFormRenderMode(); loginSetErr('#loginFormErr','');
+    LOGIN_FORM_MODE='login'; loginFormRenderMode(); loginSetErr('#loginFormErr','');
     $('#loginFormEmail').value=''; $('#loginFormPw').value=''; $('#loginFormPw2').value='';
     show('scrLoginEmail');
     setTimeout(()=>{ const el=$('#loginFormEmail'); if(el) el.focus(); },60);
