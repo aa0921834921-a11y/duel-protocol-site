@@ -5993,6 +5993,10 @@ function showSettings(){
 async function doLogout(){
   try{ if(window.firebase&&firebase.auth&&firebase.auth().currentUser) await firebase.auth().signOut(); }catch(e){}
   LS.set('uid',''); LS.set('authProvider',''); LS.set('authEmail',''); LS.set('name','');
+  /* 本機的 name 清空了，但如果 account.ts 沒有一起歸零，下次登入比對時間戳會誤判
+     「本機資料比較新」，反而把清空後的本機資料蓋回雲端，雲端存的名字也會被洗掉。
+     歸零後，下次登入一定會判定雲端比較新，正確把名字拉回來。 */
+  account.ts=0; LS.set('acct',account);
   location.reload();
 }
 /* ---- 刪除帳號（Google Play／App Store 政策要求：有註冊帳號就必須提供刪除功能）----
@@ -9929,7 +9933,7 @@ function taskReturnGo(){
 const TASK_NAV={
   win:()=>{ taskReturnActive=true; renderMap(); show('scrMap'); },
   tower:()=>{ taskReturnActive=true; dunOpen('solo'); },
-  raid:()=>{ taskReturnActive=true; raidOpen(); },
+  raid:()=>{ taskReturnActive=true; dunOpen('multi'); },
   gacha:()=>{ taskReturnActive=true; applyTheme('l0'); renderGacha(); show('scrGacha'); },
   break:()=>{ taskReturnActive=true; renderBag(); show('scrBag'); }
 };
