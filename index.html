@@ -7201,8 +7201,24 @@ function obLoadFB(){
   });
   return one(OB_FB_SDK[0]).then(()=>one(OB_FB_SDK[1]));
 }
+/* 好友對戰／組隊突襲要求 auth != null 才能讀寫 rooms／raids，
+   但這裡從沒真的登入過——雲端存檔那邊有 signInAnonymously()，這裡沒有，
+   規則跟連線邏輯對不起來，才會 permission_denied。補上：沒登入就先匿名登入。 */
+function obEnsureAuth(){
+  return new Promise((res,rej)=>{
+    if(window.firebase&&firebase.auth) return res();
+    const el=document.createElement('script');
+    el.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js';
+    el.onload=res; el.onerror=rej; document.head.appendChild(el);
+  }).then(()=>{
+    if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    if(firebase.auth().currentUser) return firebase.auth().currentUser;
+    return firebase.auth().signInAnonymously().then(cred=>cred.user);
+  });
+}
 async function obFbEnter(role,code,isJoin){
   await obLoadFB();
+  await obEnsureAuth();
   if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
   const db=firebase.database();
   const room=db.ref('rooms/'+code);
@@ -7338,6 +7354,7 @@ async function obEnterRoom(role,code){
     obBadgeSet('','連線中');
     try{ await obFbEnter(role,code,role==='g'); }
     catch(e){
+      console.error('[obFbEnter failed]',e);   // 真正的錯誤原因看這裡（DevTools Console）
       obBadgeSet('bad','無法連線');
       $('#obErr').textContent = e && e.noroom ? '找不到這個房號，請確認對方的房間還開著'
         : e && e.full ? '這個房間已經有兩個人了'
@@ -7958,6 +7975,7 @@ function roleBadge(r){ return '<span class="rolebadge rb-'+r+'"><i>'+RD_ROLE_SVG
 
 async function rdFbEnter(isHost,code){
   await obLoadFB();
+  await obEnsureAuth();
   if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
   const db=firebase.database();
   const room=db.ref('raids/'+code);
@@ -7990,6 +8008,7 @@ async function rdEnterRoom(isHost,code){
     obBadgeSet('','連線中');
     try{ await rdFbEnter(isHost,code); }
     catch(e){
+      console.error('[rdFbEnter failed]',e);   // 真正的錯誤原因看這裡（DevTools Console）
       obBadgeSet('bad','無法連線');
       $('#rdErr').textContent = e&&e.noroom?'找不到這個副本房號':'連不上伺服器，請確認網路';
       RD=null; obFbCleanup(false); bH.disabled=bJ.disabled=false; sMiss(); return;
