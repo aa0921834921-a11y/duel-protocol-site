@@ -8043,7 +8043,7 @@ function rdRenderAv(){ renderAvPicker('#rdAvRow','#rdPreview','avrd'); }
 /* 主選單的「天眼副本」現在先進樞紐（單人／多人分頁），
    不再直接跳進多人大廳 —— 單人副本原本藏在世界對戰底下，很難找到。 */
 $('#btnRaid').onclick=()=>{ sHotEnter(); vib(12); dunOpen('solo'); };
-$('#btnDunBack').onclick=()=>{ sBack(); show('scrTitle'); };
+$('#btnDunBack').onclick=()=>{ if(taskReturnGo())return; sBack(); show('scrTitle'); };
 $('#btnDunRaid').onclick=()=>{ sFire(); vib(12); raidOpen(); };
 /* 副本搬到天眼副本之後，打完副本卻回到世界對戰的話，
    玩家會在那個畫面上找不到副本列表，等於被丟到不相干的地方。
@@ -9928,7 +9928,7 @@ function taskReturnGo(){
 }
 const TASK_NAV={
   win:()=>{ taskReturnActive=true; renderMap(); show('scrMap'); },
-  tower:()=>{ taskReturnActive=true; if(!TOS) TOS=tosLoad(); tosHome(); },
+  tower:()=>{ taskReturnActive=true; dunOpen('solo'); },
   raid:()=>{ taskReturnActive=true; raidOpen(); },
   gacha:()=>{ taskReturnActive=true; applyTheme('l0'); renderGacha(); show('scrGacha'); },
   break:()=>{ taskReturnActive=true; renderBag(); show('scrBag'); }
