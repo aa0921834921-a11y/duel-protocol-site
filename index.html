@@ -4714,7 +4714,7 @@ async function onAuthSuccess(user){
       else{ console.log('[onAuthSuccess] 雲端有資料，一律以雲端為準還原'); applySnapshot(cloudData); }
       CLOUD.ready=true;
       acctSet('on','已同步 ☁');
-    }catch(e){ /* 綁定失敗就先維持本機存檔,不影響登入本身 */ }
+    }catch(e){ console.error('[onAuthSuccess] 雲端綁定失敗，維持本機存檔:',e); /* 不影響登入本身 */ }
   }
   const hasName=!!((LS.get('name','')||'').trim());
   if(hasName){ sGood(3); show('scrTitle'); return; }
@@ -4934,11 +4934,14 @@ async function cloudInit(){
 }
 let cloudTimer=null;
 function cloudPush(){
-  if(!CLOUD.ready||!CLOUD.ref) return;
+  if(!CLOUD.ready||!CLOUD.ref){ console.log('[cloudPush] 中止：CLOUD.ready=',CLOUD.ready,'CLOUD.ref=',!!CLOUD.ref); return; }
+  console.log('[cloudPush] 已排入佇列，1.2 秒後送出，目前本機 name=',LS.get('name',''));
   clearTimeout(cloudTimer);
   cloudTimer=setTimeout(async()=>{
-    try{ acctSet('sync','儲存中'); await CLOUD.ref.set(localSnapshot()); acctSet('on','已同步 ☁'); }
-    catch(e){ acctSet('','同步失敗'); }
+    const snap=localSnapshot();
+    console.log('[cloudPush] 即將寫入雲端，內容=',snap);
+    try{ acctSet('sync','儲存中'); await CLOUD.ref.set(snap); acctSet('on','已同步 ☁'); console.log('[cloudPush] 寫入成功'); }
+    catch(e){ acctSet('','同步失敗'); console.error('[cloudPush] 寫入失敗',e); }
   },1200);
 }
 function own(id){ return wallet.owned.indexOf(id)>=0; }
@@ -5339,6 +5342,7 @@ function nameIssue(raw){
     if(!validate()) return;
     const name=nm.value.trim().slice(0,8);
     LS.set('name',name);
+    cloudPush();   // 名字只存本機的話，雲端那份永遠是空的，登出後當然拉不回來
     sGood(3); vib([12,18,12]);
     show('scrTitle');
   };
