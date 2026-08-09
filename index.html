@@ -213,9 +213,9 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 @keyframes nudge{50%{transform:scale(1.12)}}
 .icon.armr{color:#fff;background:color-mix(in srgb,var(--foe) 28%,transparent);border-color:var(--foe)}
 
-.foezone{padding:12px 13px 11px;overflow:hidden}
+.foezone{padding:9px 13px 8px;overflow:hidden}
 .foehead{display:flex;gap:13px;align-items:center}
-.eyebox{width:92px;flex:none;position:relative}
+.eyebox{width:80px;flex:none;position:relative}
 .foeinfo{flex:1;min-width:0}
 .foename{font-family:var(--en);font-weight:800;font-size:15.5px;letter-spacing:2px;color:var(--foe);
   text-shadow:0 0 14px color-mix(in srgb,var(--foe) 60%,transparent);transition:color .5s}
@@ -232,10 +232,10 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .threat.jam .seg{animation:jam .5s steps(2) infinite;background:repeating-linear-gradient(90deg,#4A2438 0 4px,#1E1030 4px 8px)}
 .threat.jam .seg:nth-child(2n){animation-delay:.25s}
 @keyframes jam{50%{opacity:.35}}
-.stream{margin-top:8px;height:16px;overflow:hidden;font-family:var(--mono);font-size:11.5px;
+.stream{margin-top:6px;height:14px;overflow:hidden;font-family:var(--mono);font-size:11.5px;
   color:color-mix(in srgb,var(--foe) 55%,transparent);letter-spacing:2px;white-space:nowrap;opacity:0;transition:opacity .25s}
 .stream.on{opacity:1}
-.taunt{margin-top:7px;min-height:18px;font-size:13px;color:color-mix(in srgb,var(--foe) 40%,#fff)}
+.taunt{margin-top:5px;min-height:15px;font-size:13px;color:color-mix(in srgb,var(--foe) 40%,#fff)}
 .taunt::before{content:"❝ ";color:var(--foe)}
 .taunt:empty::before{content:""}
 
@@ -251,7 +251,7 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .turnmsg{font-weight:700;font-size:13px;letter-spacing:2px;white-space:nowrap}
 
 .battlelog{padding:10px 13px 11px}
-.log{margin-top:7px;max-height:196px;overflow-y:auto;font-family:var(--mono);font-size:14px;line-height:1.55;
+.log{margin-top:7px;max-height:210px;overflow-y:auto;font-family:var(--mono);font-size:14px;line-height:1.55;
   scrollbar-width:thin;scrollbar-color:rgba(160,160,255,.35) transparent}
 .log::-webkit-scrollbar{width:4px}
 .log::-webkit-scrollbar-thumb{background:rgba(160,160,255,.35);border-radius:2px}
@@ -291,31 +291,31 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
   border:0.5px solid rgba(150,150,220,.1);position:relative;z-index:1}
 .row2.hit{border-color:rgba(255,215,94,.5);box-shadow:0 0 10px rgba(255,215,94,.16)}
 .row2.stale{opacity:.32!important}
-.row2 .lgnode{display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;
-  background:rgba(150,150,220,.14);color:var(--dim);font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
+.row2 .lgnode{display:flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;
+  background:rgba(150,150,220,.14);color:var(--dim);font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0}
 .row2.hit .lgnode{background:var(--gold);color:#0A0510;box-shadow:0 0 7px var(--gold)}
 .row2.me .lgnode{background:rgba(40,230,200,.16);color:var(--me)}
 .row2.foe .lgnode{background:rgba(255,59,87,.16);color:var(--foe)}
-.row2 .lgtag{font-size:11px;font-weight:600;flex-shrink:0;max-width:60px;overflow:hidden;
+.row2 .lgtag{font-size:12px;font-weight:600;flex-shrink:0;max-width:60px;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
 .row2 .lgchips{display:flex;gap:2px;flex-shrink:0}
-.row2 .lgd{display:inline-flex;align-items:center;justify-content:center;width:16px;height:18px;border-radius:4px;
+.row2 .lgd{display:inline-flex;align-items:center;justify-content:center;width:18px;height:20px;border-radius:4px;
   background:linear-gradient(180deg,rgba(40,230,200,.15),rgba(40,230,200,.03));border:1px solid rgba(40,230,200,.26);
-  font-family:var(--mono);font-weight:700;font-size:10.5px;color:#D6FFF6}
+  font-family:var(--mono);font-weight:700;font-size:12px;color:#D6FFF6}
 .row2.masked .lgd{color:#6A5A7F;border-color:rgba(150,150,220,.15);background:none;filter:blur(.4px)}
 .row2 .lgfill{flex:1}
 .row2 .lgresult{display:flex;gap:5px;align-items:center;flex-shrink:0}
 .row2 .lgbadge{display:inline-flex;align-items:center;gap:3px;border-radius:20px;padding:1px 6px;
-  font-family:var(--mono);font-size:10px;font-weight:700}
+  font-family:var(--mono);font-size:11px;font-weight:700}
 .row2 .lgbadge::before{content:"";width:5px;height:5px;border-radius:50%}
 .row2 .lgbadge.lga{background:rgba(70,255,158,.13);border:1px solid rgba(70,255,158,.4);color:var(--grn)}
 .row2 .lgbadge.lga::before{background:var(--grn);box-shadow:0 0 4px var(--grn)}
 .row2 .lgbadge.lgb{background:rgba(255,197,61,.13);border:1px solid rgba(255,197,61,.4);color:var(--amb)}
 .row2 .lgbadge.lgb::before{background:var(--amb);box-shadow:0 0 4px var(--amb)}
 .row2 .lgbadge.lgmask{background:rgba(150,150,220,.1);border:1px solid rgba(150,150,220,.25);color:#6A5A7F}
-.row2 .lgmiss{font-family:var(--mono);font-size:10px;color:var(--dim)}
-.row2 .lgpend{font-family:var(--mono);font-size:10px;color:var(--dim)}
-.row2 .lgextra{font-family:var(--mono);font-size:9.5px;color:var(--dim);flex-shrink:0}
+.row2 .lgmiss{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.row2 .lgpend{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.row2 .lgextra{font-family:var(--mono);font-size:10.5px;color:var(--dim);flex-shrink:0}
 
 .battlelog .ptitle{justify-content:space-between}
 .logExpandBtn{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.5px;color:var(--me);
@@ -335,6 +335,28 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .logFull{flex:1;max-height:none;margin:0;padding:2px 16px 16px;font-size:14px}
 #logFull .row2.foe{display:none}
 #logFull[data-src="log"] .sys{display:none}
+
+/* ================= 新手教學系統 ================= */
+#tutAskModal{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;background:rgba(6,2,14,.75)}
+#tutAskModal[hidden]{display:none}
+.tutask-card{max-width:300px;background:#150a24;border:1px solid rgba(255,215,94,.4);border-radius:14px;padding:20px;text-align:center}
+.tutask-title{font-family:var(--head);color:var(--gold);font-size:17px;margin-bottom:8px}
+.tutask-desc{font-size:13px;color:#d8d0e6;line-height:1.6;margin-bottom:16px}
+.tutask-btns{display:flex;gap:10px;justify-content:center}
+#tutOverlay{position:fixed;inset:0;z-index:9997;pointer-events:none}
+#tutOverlay[hidden]{display:none}
+.tutmask{position:fixed;background:rgba(6,2,14,.72);pointer-events:auto}
+.tut-target{border-radius:10px;outline:2px solid rgba(255,215,94,.85);outline-offset:3px}
+#tutBox{position:fixed;z-index:10000;max-width:280px;background:#150a24;
+  border:1px solid rgba(255,215,94,.4);border-radius:12px;padding:14px;
+  box-shadow:0 8px 30px rgba(0,0,0,.5)}
+#tutTitle{font-family:var(--head);color:var(--gold);font-size:15px;margin-bottom:6px}
+#tutDesc{font-size:13px;line-height:1.5;color:#d8d0e6}
+#tutFoot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px}
+#tutStepN{font-family:var(--mono);font-size:11px;color:var(--dim)}
+#tutBtns{display:flex;gap:8px}
+#tutBtns .btn{padding:7px 12px;font-size:12px}
+#tutHint{font-family:var(--mono);font-size:11px;color:var(--gold);margin-top:10px}
 #logFull{max-height:none}
 #logOverlayConv{flex-shrink:0;padding:0 16px}
 .convbar{margin:8px 0 10px;position:relative;z-index:1}
@@ -344,7 +366,7 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .convfill{height:100%;background:linear-gradient(90deg,#0F6E56,var(--me));box-shadow:0 0 8px rgba(40,230,200,.5);
   border-radius:3px;transition:width .5s ease}
 .row2.best-clue{border-color:rgba(255,215,94,.4);box-shadow:0 0 10px rgba(255,215,94,.14)}
-.row2 .lgbest{font-family:var(--mono);font-size:9px;color:var(--gold);margin-right:4px;flex-shrink:0;white-space:nowrap}
+.row2 .lgbest{font-family:var(--mono);font-size:10px;color:var(--gold);margin-right:4px;flex-shrink:0;white-space:nowrap}
 .log>.row2.lgpin{position:sticky;bottom:0;margin-top:8px;padding-top:9px;opacity:1;z-index:1;
   border-top:1px dashed rgba(255,215,94,.4);
   background:linear-gradient(180deg,rgba(20,10,34,0),rgba(16,8,28,.94) 30%)}
@@ -2223,7 +2245,7 @@ body[data-phase="scrBoot"] #bootScene{display:block}
 .lchip{font-size:11.5px;letter-spacing:1px;padding:5px 11px;border-radius:20px;
   border:1px solid rgba(70,255,158,.4);color:var(--grn);background:rgba(70,255,158,.07)}
 
-@media (max-height:800px){.log{max-height:150px}.key{height:38px}.eyebox{width:80px}}
+@media (max-height:800px){.log{max-height:160px}.key{height:38px}.eyebox{width:70px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 /* ══════════════════════════════════════════════════════════
    新版場景化首頁（hv2- 前綴，避免跟既有 .topbar／.card 等 class 撞名）
@@ -3430,6 +3452,138 @@ const LS={
   get(k,d){ try{ const v=localStorage.getItem('dp_'+k); return v==null?d:JSON.parse(v); }catch(e){ return d; } },
   set(k,v){ try{ localStorage.setItem('dp_'+k,JSON.stringify(v)); }catch(e){} }
 };
+
+/* ================= 新手教學引擎 =================
+   共用元件，餵不同的 steps 陣列就能套到任何畫面。每個 step：
+   { target: CSS selector 字串, title, desc,
+     requireClick: true 就必須真的點到 target 才會前進（會攔截其他地方的點擊，
+       target 本身仍然可以正常觸發它原本的功能，例如導頁），
+       false 就顯示「下一步」按鈕讓玩家自己按,
+     skipIf: ()=>bool，回傳 true 就跳過這一步（例如背包還沒有卡片時跳過卡片列表說明）,
+     afterDelay: requireClick 觸發後，等多久再進下一步（讓畫面切換動畫跑完）}
+   看過的教學用 LS 記錄（key 前綴 tutSeen_），同一份存檔不會重複跳出來。 */
+const TUT_SEEN=k=>LS.get('tutSeen_'+k,false);
+const TUT_MARK=k=>LS.set('tutSeen_'+k,true);
+let tutActive=false, tutSteps=[], tutIx=-1, tutDoneKey=null, tutClickHandler=null;
+
+function tutBuildDom(){
+  if(document.getElementById('tutOverlay')) return;
+  const ov=document.createElement('div'); ov.id='tutOverlay'; ov.hidden=true;
+  ov.innerHTML='<div class="tutmask" id="tutMaskT"></div><div class="tutmask" id="tutMaskB"></div>'+
+    '<div class="tutmask" id="tutMaskL"></div><div class="tutmask" id="tutMaskR"></div>'+
+    '<div class="tutmask" id="tutMaskC" style="background:transparent"></div>';
+  document.body.appendChild(ov);
+  const box=document.createElement('div'); box.id='tutBox'; box.hidden=true;
+  box.innerHTML='<div id="tutTitle"></div><div id="tutDesc"></div><div id="tutHint">點一下上面反白的地方繼續</div>'+
+    '<div id="tutFoot"><span id="tutStepN"></span><div id="tutBtns">'+
+    '<button id="tutSkip" class="btn sec">跳過教學</button><button id="tutNext" class="btn pri">下一步</button>'+
+    '</div></div>';
+  document.body.appendChild(box);
+  $('#tutSkip').onclick=tutEnd;
+  $('#tutNext').onclick=()=>tutGo(tutIx+1);
+  window.addEventListener('resize',()=>{ if(tutActive) tutPositionCurrent(); });
+}
+
+function tutStart(steps,doneKey){
+  tutBuildDom();
+  tutSteps=steps; tutDoneKey=doneKey; tutActive=true;
+  $('#tutOverlay').hidden=false; $('#tutBox').hidden=false;
+  tutGo(0);
+}
+
+function tutEnd(){
+  tutActive=false;
+  if(tutClickHandler){ document.removeEventListener('click',tutClickHandler,true); tutClickHandler=null; }
+  const old=document.querySelector('.tut-target'); if(old) old.classList.remove('tut-target');
+  const ov=$('#tutOverlay'); if(ov) ov.hidden=true;
+  const box=$('#tutBox'); if(box) box.hidden=true;
+  const go=$('#overlay'); if(go) go.hidden=true;   // 防呆：順手關掉可能卡住的遊戲內建彈窗
+  if(tutDoneKey) TUT_MARK(tutDoneKey);
+}
+
+function tutGo(ix){
+  const old=document.querySelector('.tut-target'); if(old) old.classList.remove('tut-target');
+  if(tutClickHandler){ document.removeEventListener('click',tutClickHandler,true); tutClickHandler=null; }
+  if(ix>=tutSteps.length){ tutEnd(); return; }
+  const step=tutSteps[ix];
+  if(step.skipIf&&step.skipIf()){ tutGo(ix+1); return; }
+  const el=document.querySelector(step.target);
+  if(!el){ tutGo(ix+1); return; }   // 找不到目標（畫面還沒切過去等）就跳過，不讓玩家卡住
+  tutIx=ix;
+  el.classList.add('tut-target');
+  tutPositionCurrent();
+  $('#tutTitle').textContent=step.title||'';
+  $('#tutDesc').textContent=step.desc||'';
+  $('#tutStepN').textContent=(ix+1)+' / '+tutSteps.length;
+  $('#tutHint').hidden=!step.requireClick;
+  $('#tutNext').hidden=!!step.requireClick;
+  const maskC=document.getElementById('tutMaskC');
+  if(maskC) maskC.style.pointerEvents=step.requireClick?'none':'auto';
+  if(step.requireClick){
+    tutClickHandler=e=>{
+      if(el.contains(e.target)){
+        document.removeEventListener('click',tutClickHandler,true); tutClickHandler=null;
+        setTimeout(()=>tutGo(ix+1),step.afterDelay||280);
+      }
+    };
+    document.addEventListener('click',tutClickHandler,true);
+  }
+}
+
+/* ---- 背包教學內容 ---- */
+function tutPositionCurrent(){
+  const el=document.querySelector('.tut-target'); if(!el) return;
+  const r=el.getBoundingClientRect();
+  const pad=6, vw=window.innerWidth, vh=window.innerHeight;
+  const x0=Math.max(0,r.left-pad), y0=Math.max(0,r.top-pad);
+  const x1=Math.min(vw,r.right+pad), y1=Math.min(vh,r.bottom+pad);
+  const put=(id,l,t,w,h)=>{ const e=document.getElementById(id);
+    e.style.left=l+'px'; e.style.top=t+'px'; e.style.width=Math.max(0,w)+'px'; e.style.height=Math.max(0,h)+'px'; };
+  put('tutMaskT',0,0,vw,y0);
+  put('tutMaskB',0,y1,vw,vh-y1);
+  put('tutMaskL',0,y0,x0,y1-y0);
+  put('tutMaskR',x1,y0,vw-x1,y1-y0);
+  put('tutMaskC',x0,y0,x1-x0,y1-y0);
+  const box=$('#tutBox');
+  const spaceBelow=window.innerHeight-r.bottom;
+  if(spaceBelow>170||r.top<170){ box.style.top=(r.bottom+14)+'px'; box.style.bottom='auto'; }
+  else{ box.style.top='auto'; box.style.bottom=(window.innerHeight-r.top+14)+'px'; }
+  box.style.left=Math.max(12,Math.min(r.left,window.innerWidth-box.offsetWidth-12))+'px';
+}
+const TUT_BAG_STEPS=[
+  {target:'.dupbox',title:'重複卡片能幹嘛？',
+    desc:'抽到重複的卡會變成「閒置素材」，可以拿去強化、進化，或合成更高星的卡片。'},
+  {target:'#btnFuse',title:'星級合成',
+    desc:'4 張同星級素材有機率合成 1 張高一星的卡片，素材多的時候可以來試試看。'},
+  {target:'#bagFilter',title:'篩選',desc:'依屬性或稀有度篩選卡片，卡片一多會比較好找。'},
+  {target:'#bagSort',title:'排序',desc:'可以依星等、取得時間等方式排序卡片列表。'},
+  {target:'#bagGrid',title:'卡片列表',desc:'點任何一張卡片可以查看詳細數值、進行強化或進化。',
+    skipIf:()=>!$('#bagGrid')||!$('#bagGrid').children.length},
+  {target:'.bagtabs .bt[data-t="gear"]',title:'裝備與強化',
+    desc:'點一下這裡，切換到外觀裝備跟永久強化的分頁。',requireClick:true,afterDelay:320},
+  {target:'#bagEquipEye',title:'目前裝備',
+    desc:'這裡顯示你目前裝備中的外觀，在補給站購買或召喚取得新外觀後可以來這裡更換。'},
+  {target:'#bagSkins',title:'已擁有的外觀',desc:'收集到的所有外觀都會列在這裡，點一下就能更換裝備。'},
+  {target:'#bagUps',title:'永久強化',desc:'這些是一次購買、永久生效的強化項目。'}
+];
+const TUT_INTRO_STEPS=[
+  {target:'#btnHv2Bag',title:'背包',desc:'先點一下頭像，這裡可以打開你的背包。',requireClick:true,afterDelay:320},
+  ...TUT_BAG_STEPS
+];
+function tutAskIntro(){
+  let modal=document.getElementById('tutAskModal');
+  if(!modal){
+    modal=document.createElement('div'); modal.id='tutAskModal';
+    modal.innerHTML='<div class="tutask-card"><div class="tutask-title">需要新手教學嗎？</div>'+
+      '<div class="tutask-desc">帶你認識背包、卡片這些基本操作，大概花你一分鐘。之後也可以在需要時各別跳出小提示。</div>'+
+      '<div class="tutask-btns"><button id="tutAskSkip" class="btn sec">跳過</button>'+
+      '<button id="tutAskYes" class="btn pri">開始教學</button></div></div>';
+    document.body.appendChild(modal);
+  }
+  modal.hidden=false;
+  $('#tutAskSkip').onclick=()=>{ modal.hidden=true; TUT_MARK('bag'); };
+  $('#tutAskYes').onclick=()=>{ modal.hidden=true; tutStart(TUT_INTRO_STEPS,'bag'); };
+}
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 const fmt = ms => { const s = Math.floor(ms/1000);
@@ -5002,6 +5156,43 @@ function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.t
   }
   /* 依畫面自動切換配樂：SCREEN_MUSIC 沒列到的畫面（登入流程、載入中等）維持原本配樂不中斷 */
   if(Object.prototype.hasOwnProperty.call(SCREEN_MUSIC,id)) wantMusic(SCREEN_MUSIC[id]);
+  if(id==='scrTitle'&&!LS.get('tutIntroAsked',false)){
+    LS.set('tutIntroAsked',true);
+    setTimeout(tutAskIntro,500);
+  }
+  if(id==='scrBag'&&!TUT_SEEN('bag')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_BAG_STEPS,'bag'),350);
+  }
+  if(id==='scrBattle'&&!TUT_SEEN('battle')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_BATTLE_STEPS,'battle'),450);
+  }
+  if(id==='scrTosBattle'&&!TUT_SEEN('tosBattle')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_TOS_STEPS,'tosBattle'),450);
+  }
+  if(id==='scrOnlineBattle'&&!TUT_SEEN('onlineBattle')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_ONLINE_STEPS,'onlineBattle'),450);
+  }
+  if(id==='scrRaidBattle'&&!TUT_SEEN('raidBattle')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_RAID_STEPS,'raidBattle'),450);
+  }
+  if(id==='scrShop'&&!TUT_SEEN('shop')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_SHOP_STEPS,'shop'),400);
+  }
+  if(id==='scrGacha'&&!TUT_SEEN('gacha')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_GACHA_STEPS,'gacha'),400);
+  }
+  if(id==='scrLadBattle'&&!TUT_SEEN('ladBattle')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_LADBATTLE_STEPS,'ladBattle'),450);
+  }
+  if(id==='scrOnline'&&!TUT_SEEN('onlineLobby')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_ONLINE_LOBBY_STEPS,'onlineLobby'),350);
+  }
+  if(id==='scrRaidLobby'&&!TUT_SEEN('raidLobby')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_RAID_LOBBY_STEPS,'raidLobby'),350);
+  }
+  if(id==='scrTasks'&&!TUT_SEEN('tasks')&&!tutActive){
+    setTimeout(()=>tutStart(TUT_TASKS_STEPS,'tasks'),400);
+  }
 }
 
 /* ================= 開機動畫 → 角色建立（首次）／直接進標題（老玩家） ================= */
@@ -5714,6 +5905,8 @@ function showRules(){
       '<p><span class="ka">A</span>＝數字對、位置也對；<span class="kb">B</span>＝數字對、位置錯。密碼是 4 個<b>不重複</b>的數字，先達成 <span class="ka">4A</span> 者獲勝。</p>'+
       '<div class="exbox">範例：密碼 <b>1 2 3 4</b>，猜 <b>1 3 5 9</b> → <span style="color:var(--grn)">1A</span> <span style="color:var(--amb)">1B</span></div>'+
       '<p>⚔ <b>天眼之塔</b>：與守衛 AI 互相破解競速。「剩餘可能」是它<b>真實的推理進度</b>。<b>二十層</b>守衛形狀顏色各異、能力不同，可選三種難度，通關給你<b>通關密語</b>可續關。</p>'+
+      '<p>💥 <b>傷害怎麼算</b>：每一手的傷害看你<b>這手排除掉多少組候選密碼</b>，不是看猜中幾位數——就算 0A0B 完全沒中，只要一口氣刷掉大量可能，照樣可能是全場最痛的一擊；反過來，問差不多的問題就算有 A/B 傷害也可能很低。<b>血量歸零</b>或<b>直接猜中 4A</b>，兩種情況都算擊倒。</p>'+
+      '<p>🍥 <b>卡片系統</b>：每張卡有<b>隊長技</b>（上場即生效的被動加成）跟<b>主動技</b>（有冷卻時間、要手動觸發）——點任何一張卡都能看到完整數值跟技能說明。屬性相剋：水剋火、火剋木、木剋水、光暗互剋，克制方傷害 ×1.62、被克制 ×0.62。重複的卡片可以<b>強化</b>（餵經驗）、<b>進化</b>（消耗指定屬性素材換更高星）或<b>合成</b>（4 張同星換 1 張高星）。</p>'+
       '<p>🔍 <b>深度掃描</b>：探測某數字是否在對方密碼中，但<b>消耗你這回合的攻擊</b>。</p>'+
       '<p>🌐 <b>線上對戰</b>：兩支手機各自開這個遊戲，一人開房間拿 4 碼房號、另一人輸入房號即可連線互猜。你的密碼<b>不會離開你的手機</b>，只有猜測與 A/B 結果會經過伺服器。</p>'+
       '<p>🐉 <b>天眼副本</b>：全隊合力破解 Boss 的多重核心，<b>情報全隊共享</b>。你設的密碼就是你的<b>血量</b> —— Boss 猜中就倒下。</p>'+
@@ -5753,6 +5946,7 @@ function showSettings(){
       '<div class="exbox">'+acctLabel+'</div>'+
     '</div>'+
     '<div class="btnrow" style="margin-top:14px"><button class="btn sec" id="btnSetRules" style="width:100%">遊戲規則</button></div>'+
+    '<div class="btnrow" style="margin-top:14px"><button class="btn sec" id="btnSetTutReset" style="width:100%">重新播放新手教學</button></div>'+
     '<div class="btnrow" style="margin-top:14px"><button class="btn sec" id="btnSetCode" style="width:100%">輸入通關密語</button></div>'+
     '<div class="btnrow" style="margin-top:14px">'+
     (uid?'<button class="btn sec" id="btnDoLogout" style="width:100%">登出</button>':'')+
@@ -5767,6 +5961,12 @@ function showSettings(){
   overlay.hidden=false;
   const setCodeBtn=$('#btnSetCode'); if(setCodeBtn) setCodeBtn.onclick=()=>{ showPw(); };
   const setRulesBtn=$('#btnSetRules'); if(setRulesBtn) setRulesBtn.onclick=()=>{ showRules(); };
+  const setTutResetBtn=$('#btnSetTutReset'); if(setTutResetBtn) setTutResetBtn.onclick=()=>{
+    ['bag','battle','tosBattle','onlineBattle','raidBattle','shop','gacha','ladBattle','tasks','onlineLobby','raidLobby'].forEach(k=>LS.set('tutSeen_'+k,false));
+    LS.set('tutIntroAsked',false);
+    sGood(2); vib(10);
+    overlay.hidden=true;
+  };
   document.querySelectorAll('.sndbtn').forEach(b=>b.onclick=()=>{
     if(!AC) initAudio();
     muted=!muted; LS.set('muted',muted);
@@ -9508,9 +9708,17 @@ const TASK_POOL=[
 ];
 const TASK_FULL_BONUS=100;
 function blankTasks(){ return {day:0, list:[], claimedFull:false}; }
+/* 每個玩家自己的穩定亂數種子：優先用登入的 uid，沒登入就用一組只在本機產生一次、
+   之後固定不變的裝置 id，確保同一位玩家重新整理不會每次都換一批任務。 */
+function strHash(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return h>>>0; }
+function taskPlayerSeed(){
+  let pid=LS.get('uid','')||LS.get('taskDevId','');
+  if(!pid){ pid='d'+Math.random().toString(36).slice(2)+Date.now().toString(36); LS.set('taskDevId',pid); }
+  return strHash(pid);
+}
 function taskPickToday(){
   const idxs=TASK_POOL.map((_,i)=>i), pick=[];
-  let x=(dayKey()^0x9E3779B9)>>>0;                 /* 用日期當種子：全服同一天挑同一組 */
+  let x=(dayKey()^0x9E3779B9^taskPlayerSeed())>>>0;   /* 日期 + 玩家 id 一起當種子：每天、每個人都不一樣 */
   const rnd=()=>{ x^=x<<13; x>>>=0; x^=x>>>17; x^=x<<5; x>>>=0; return x/4294967296; };
   while(pick.length<4&&idxs.length){
     const j=Math.floor(rnd()*idxs.length);
@@ -9580,10 +9788,117 @@ function renderCheckin(){
   else { btn.textContent='領取今日簽到　◈'+CHECKIN_REWARDS[dayNo-1]; btn.disabled=false; btn.classList.remove('sec'); }
 }
 const TASK_ICON={win:'⚔',tower:'🗼',raid:'🛡',gacha:'🔮',break:'🧩',ladder:'🏆'};
+/* ---- 單人闖關 / 世界大戰 戰鬥畫面教學內容 ---- */
+const TUT_BATTLE_STEPS=[
+  {target:'#scrBattle .helpbtn',title:'完整規則',
+    desc:'不確定機制細節，隨時點這裡看完整規則說明（傷害怎麼算、卡片技能都在裡面）。'},
+  {target:'#scrBattle .foezone',title:'守衛狀態',
+    desc:'顯示守衛目前的推理進度、還剩幾組密碼可能是你的——這是它真實的破解進度，不是裝飾。'},
+  {target:'#entryCells',title:'輸入你的猜測',
+    desc:'點下面數字鍵依序填入 4 個數字。長按數字鍵可以標記「一定不在」或「一定在」，長按已輸入的格子能把這一格釘住，下一輪自動幫你填回去。'},
+  {target:'#btnScan',title:'深度掃描',
+    desc:'探測某個數字在不在對方密碼裡，但會消耗你這回合的攻擊機會，請小心使用。'},
+  {target:'#scrBattle .battlelog.panel',title:'戰鬥紀錄',
+    desc:'每一手的結果都記在這裡，篩掉最多候選的那手會標金色「最佳線索」、釘在最下面，點「展開」能看完整紀錄。'}
+];
+const TUT_ONLINE_STEPS=[
+  {target:'#scrOnlineBattle .helpbtn',title:'完整規則',
+    desc:'不確定機制細節，隨時點這裡看完整規則說明。'},
+  {target:'#scrOnlineBattle .foezone',title:'對手狀態',
+    desc:'顯示對手目前掌握你密碼的進度——這是真實連線對戰，回合制，等對方猜完才輪到你。'},
+  {target:'#obEntryCells',title:'輸入你的猜測',
+    desc:'跟其他模式一樣：點數字鍵填 4 位數，長按數字鍵標記「一定不在／一定在」，長按已輸入的格子可以釘住這一格。'},
+  {target:'#btnObScan',title:'深度掃描',
+    desc:'探測某個數字在不在對方密碼裡，但會消耗你這回合的攻擊機會。'},
+  {target:'#obLog',title:'戰鬥紀錄',
+    desc:'雙方每一手的結果都記在這裡，先達成 4A 的人獲勝。'}
+];
+const TUT_RAID_STEPS=[
+  {target:'#scrRaidBattle .helpbtn',title:'完整規則',
+    desc:'組隊突襲的坦克/治療/輸出分工，不確定的話隨時點這裡看完整說明。'},
+  {target:'.bossframe',title:'Boss 核心',
+    desc:'Boss 有多重核心要全隊合力破解，右邊的狂暴條會隨回合累積，太久沒解掉會越打越痛。'},
+  {target:'#rdParty',title:'隊伍與角色',
+    desc:'全隊的情報是共享的：坦克嘲諷吸引火力（只洩漏猜中幾個數字，不透露位置）、治療能幫隊友重設密碼並回血、輸出專心破解核心。'},
+  {target:'#rdEntryCells',title:'輸入你的猜測',
+    desc:'跟其他模式一樣：點數字鍵填 4 位數，長按數字鍵標記「一定不在／一定在」，長按已輸入的格子可以釘住這一格。'},
+  {target:'.abilities',title:'技能按鈕',
+    desc:'嘲諷、治療這兩個主動技能在這裡觸發，要看你在隊伍裡選的角色決定能用哪個。'},
+  {target:'#rdLog',title:'共享戰報',
+    desc:'全隊的猜測跟結果都會顯示在這裡，是非同步回填的——別人的結果送達伺服器後才會補上。'}
+];
+const TUT_SHOP_STEPS=[
+  {target:'#scrShop .wallet',title:'解碼點數',
+    desc:'商城裡的花費都用解碼點數計價，對戰、任務、簽到都能賺到。'},
+  {target:'#btnGoGacha',title:'天眼召喚',
+    desc:'用解碼點數抽新的眼睛外觀跟卡片，十連抽保底 4★以上，召喚前都會再次確認，不會手滑。'},
+  {target:'#scrShop .bagtabs',title:'外觀／永久強化',
+    desc:'這裡切換分頁：外觀是造型收藏，永久強化是買斷後長期生效的加成。'},
+  {target:'#shopSecSkin',title:'眼睛外觀',
+    desc:'買下來的外觀在線上對戰、派對對戰中對手也看得到，純造型不影響數值。',
+    skipIf:()=>$('#shopSecSkin')&&$('#shopSecSkin').hidden}
+];
+const TUT_GACHA_STEPS=[
+  {target:'#gachaBanners',title:'召喚池',desc:'不同池子有各自的限定角色，切換池子看看有沒有你想要的。'},
+  {target:'.pityblock',title:'保底機制',desc:'累積到 80 抽必定出 5★以上，抽越多離保底越近，不會完全看運氣。'},
+  {target:'.gbtnrow',title:'單抽／十連',
+    desc:'十連召喚保底至少 1 張 4★以上，比較划算；召喚前都會再次確認，不會誤觸。'},
+  {target:'#gachaProg',title:'收藏進度',desc:'還沒收集到的卡片會列在這裡，方便你知道還缺哪些。'}
+];
+const TUT_LADBATTLE_STEPS=[
+  {target:'.rcz',title:'雙方進度',
+    desc:'天梯是即時鏡像賽：你跟對手同時解同一組密碼，這裡即時顯示雙方的收斂進度，先到 100% 的人贏。'},
+  {target:'#lbMySec',title:'解析能量',
+    desc:'帶上場的卡片主動技靠這股能量施放，累積到一定量就能觸發，加速你的推理。'},
+  {target:'#lbCells',title:'輸入猜測',
+    desc:'跟其他模式一樣輸入 4 個不重複的數字，但天梯不能標記或釘位置，純粹比推理速度快慢。'},
+  {target:'#lbLog',title:'對戰紀錄',
+    desc:'雙方的猜測結果都會顯示在這裡，方便你判斷誰的進度比較快。'}
+];
+const TUT_ONLINE_LOBBY_STEPS=[
+  {target:'#btnObHost',title:'開啟新房',
+    desc:'開一個新房間，系統會給你 4 碼房號，傳給好友輸入就能加入對戰。'},
+  {target:'#obCode',title:'輸入房號加入',
+    desc:'好友開房後，把他的 4 碼房號輸入這裡就能加入他的房間。'}
+];
+const TUT_RAID_LOBBY_STEPS=[
+  {target:'#rdRolePick',title:'選擇職業',
+    desc:'坦克嘲諷吸引火力、輸出專心破解核心、治療幫隊友重設密碼並回血——出發前先想好隊伍怎麼搭配。'},
+  {target:'#rdTierRow',title:'難度',
+    desc:'難度由房主決定，越高難度 Boss 越強、獎勵也越好。'},
+  {target:'#btnRdHost',title:'開新副本',
+    desc:'開一個新副本房間，最多 6 人連線，全隊情報共享。'},
+  {target:'#rdCode',title:'加入隊友的副本',
+    desc:'隊友開房後，把他的 4 碼房號輸入這裡就能加入。'}
+];
+const TUT_TASKS_STEPS=[
+  {target:'#tkList',title:'每日任務',
+    desc:'每天登入都會隨機給你幾個任務，完成後點「領取」拿解碼點數；也可以直接點任務內容（不是領取鈕）跳到對應畫面去做。'},
+  {target:'#tkFull',title:'全部完成加碼',desc:'任務都領取完，還能再多拿一次額外獎勵。'}
+];
+const TUT_TOS_STEPS=[
+  {target:'#scrTosBattle .helpbtn',title:'完整規則',
+    desc:'世界大戰的傷害算法比較特別，不確定的話隨時點這裡看完整說明。'},
+  {target:'#tosMyHp',title:'隊伍血量',
+    desc:'這是你隊伍的血量，歸零就戰敗。Boss 每隔幾輪會攻擊一次，拖久了會更危險。'},
+  {target:'#tosPad',title:'輸入猜測',
+    desc:'跟其他模式一樣輸入 4 位數猜測，但傷害是看你這手排除掉多少組候選，不是看猜中幾位數——完全沒中也可能打出全場最痛的一擊。'},
+  {target:'#tosLog',title:'戰鬥紀錄',
+    desc:'每一手排掉的候選數（▼）跟剩餘數（餘）都會顯示在這裡，可以用來判斷這手划不划算。'}
+];
+/* 每日任務點下去要跳到哪個畫面：直接借用遊戲原本開啟該畫面時會呼叫的準備函式，
+   避免各自重寫一份、之後兩邊邏輯兜不起來。 */
+const TASK_NAV={
+  win:()=>{ renderMap(); show('scrMap'); },
+  tower:()=>{ tosOpenPick(); },
+  raid:()=>{ raidOpen(); },
+  gacha:()=>{ applyTheme('l0'); renderGacha(); show('scrGacha'); },
+  break:()=>{ renderBag(); show('scrBag'); }
+};
 function renderTasks(){
   $('#tkList').innerHTML=tasks.list.map(t=>{
     const done=t.prog>=t.goal;
-    return '<div class="tk-row'+(t.claimed?' done':'')+'">'+
+    return '<div class="tk-row'+(t.claimed?' done':'')+'" data-type="'+t.type+'" style="cursor:pointer">'+
       '<div class="tic">'+(TASK_ICON[t.type]||'★')+'</div>'+
       '<div class="tk-body"><div class="ds">'+esc(t.desc)+'</div>'+
       '<div class="tk-pbar"><i style="width:'+Math.round(t.prog/t.goal*100)+'%"></i></div>'+
@@ -9592,6 +9907,13 @@ function renderTasks(){
       '<button class="tk-claim'+(done&&!t.claimed?'':' off')+'" data-id="'+t.id+'"'+
       (done&&!t.claimed?'':' disabled')+'>'+(t.claimed?'已領':'領取')+'</button></div></div>';
   }).join('');
+  $('#tkList').querySelectorAll('.tk-row').forEach(row=>{
+    row.onclick=e=>{
+      if(e.target.closest('.tk-claim')) return;   // 領取鈕自己的點擊不要連帶觸發跳轉
+      const fn=TASK_NAV[row.dataset.type];
+      if(fn){ sKey&&sKey(6); vib&&vib(8); fn(); }
+    };
+  });
   $('#tkList').querySelectorAll('.tk-claim').forEach(b=>{
     b.onclick=()=>{
       const t=tasks.list.find(x=>x.id===b.dataset.id);
