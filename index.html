@@ -4709,10 +4709,9 @@ async function onAuthSuccess(user){
       CLOUD.ref=firebase.database().ref('players/'+user.uid);
       const snap=await CLOUD.ref.once('value');
       const cloudData=snap.val();
-      const localTs=account.ts||0;
-      if(!cloudData) await CLOUD.ref.set(localSnapshot());
-      else if((cloudData.ts||0)>localTs) applySnapshot(cloudData);
-      else await CLOUD.ref.set(localSnapshot());
+      console.log('[onAuthSuccess] cloudData=',cloudData);
+      if(!cloudData){ console.log('[onAuthSuccess] 雲端沒資料(新帳號)，上傳本機當作初始值'); await CLOUD.ref.set(localSnapshot()); }
+      else{ console.log('[onAuthSuccess] 雲端有資料，一律以雲端為準還原'); applySnapshot(cloudData); }
       CLOUD.ready=true;
       acctSet('on','已同步 ☁');
     }catch(e){ /* 綁定失敗就先維持本機存檔,不影響登入本身 */ }
@@ -5827,7 +5826,6 @@ function victory(){
     const amt=capped?10:25;
     saveWallet();
     addCredits(amt);
-    taskProgress('win',1);
     lastReward={total:amt,lines:[capped
       ?'快速對戰獲勝　+10（今日已達 5 場上限）'
       :'快速對戰獲勝　+25（今日第 '+wallet.qmWins+'/5 場）']};
@@ -7350,7 +7348,7 @@ function obRenderAv(){ renderAvPicker('#obAvRow','#obPreview','avob'); }
 $('#btnOnline').onclick=()=>{ sHotEnter(); vib(12); obRenderAv();
   if(!$('#obName').value) $('#obName').value=LS.get('name','')||'';
   mountEye('#obPreview',obAvatar,'op'); $('#obErr').textContent=''; show('scrOnline'); };
-$('#btnObBack').onclick=()=>{ sBack(); show('scrTitle'); };
+$('#btnObBack').onclick=()=>{ if(taskReturnGo())return; sBack(); show('scrTitle'); };
 function obMyName(){ const v=$('#obName').value.trim(); const n=v?v.slice(0,8):'玩家'; LS.set('name',n); return n; }
 async function obEnterRoom(role,code){
   $('#obErr').textContent='';
@@ -9216,7 +9214,7 @@ function arenaBack(){
    配對／對戰／結算三個畫面仍然沿用，只是返回路徑改指向世界對戰。 */
 $('#btnLadBack').onclick=()=>{ sBack(); show('scrTitle'); };
 $('#ladRanked').onclick=()=>{ sFire(); vib(12); mmStart(); };
-$('#btnMMCancel').onclick=()=>{ sBack(); mmStop(); arenaMMStop();
+$('#btnMMCancel').onclick=()=>{ if(taskReturnGo())return; sBack(); mmStop(); arenaMMStop();
   arenaBack(); };
 $('#btnLbQuit').onclick=()=>{
   if(!LB||LB.over){ arenaBack(); return; }
@@ -9731,7 +9729,7 @@ function checkinClaim(){
    任務池刻意扣連到玩家本來就會做的動作，不是額外的義務勞動；
    4 個全部完成再加一次性全勤獎勵。 */
 const TASK_POOL=[
-  {id:'win1',   type:'win',   goal:1, reward:100, desc:'贏得 1 場對戰（快速／天梯／好友對戰皆可）'},
+  {id:'win1',   type:'win',   goal:1, reward:100, desc:'贏得 1 場好友對戰或天梯對戰'},
   {id:'tower1', type:'tower', goal:1, reward:90,  desc:'通關天眼之塔 1 層（含重複通關）'},
   {id:'raid1',  type:'raid',  goal:1, reward:110, desc:'完成 1 場天眼副本（不論勝敗）'},
   {id:'gacha1', type:'gacha', goal:1, reward:90,  desc:'進行 1 次天眼召喚'},
@@ -9931,9 +9929,11 @@ function taskReturnGo(){
   return true;
 }
 const TASK_NAV={
-  win:()=>{ taskReturnActive=true; renderMap(); show('scrMap'); },
+  win:()=>{ taskReturnActive=true; obRenderAv();
+    if(!$('#obName').value) $('#obName').value=LS.get('name','')||'';
+    mountEye('#obPreview',obAvatar,'op'); $('#obErr').textContent=''; show('scrOnline'); },
   tower:()=>{ taskReturnActive=true; dunOpen('solo'); },
-  raid:()=>{ taskReturnActive=true; dunOpen('multi'); },
+  raid:()=>{ taskReturnActive=true; dunOpen('solo'); },
   gacha:()=>{ taskReturnActive=true; applyTheme('l0'); renderGacha(); show('scrGacha'); },
   break:()=>{ taskReturnActive=true; renderBag(); show('scrBag'); }
 };
