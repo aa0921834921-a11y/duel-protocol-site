@@ -9620,7 +9620,10 @@ function effIdeal(rounds){
    題目由「日期」決定，所以全服拿到同一題卻不需要任何伺服器。
    用固定的雜湊而非 Math.random，任何裝置算出來的都一樣。 */
 function dayKey(d){
-  const t=d||new Date();
+  /* 統一用「台灣時間 00:00」當作換日基準，不受玩家裝置本身的系統時區影響：
+     先把時間點平移 +8 小時，再讀平移後的 UTC 年月日，等於直接讀出台灣的日曆日期。
+     簽到、天梯每日題目、每日任務全部共用這個函式，所以全部會一起在台灣午夜重置。 */
+  const t=new Date((d||new Date()).getTime()+8*3600*1000);
   return t.getUTCFullYear()*10000+(t.getUTCMonth()+1)*100+t.getUTCDate();
 }
 function hash32(x){
@@ -9909,7 +9912,7 @@ const TUT_TOS_STEPS=[
    避免各自重寫一份、之後兩邊邏輯兜不起來。 */
 const TASK_NAV={
   win:()=>{ renderMap(); show('scrMap'); },
-  tower:()=>{ tosOpenPick(); },
+  tower:()=>{ if(!TOS) TOS=tosLoad(); tosHome(); },
   raid:()=>{ raidOpen(); },
   gacha:()=>{ applyTheme('l0'); renderGacha(); show('scrGacha'); },
   break:()=>{ renderBag(); show('scrBag'); }
