@@ -5156,6 +5156,9 @@ function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.t
   }
   /* 依畫面自動切換配樂：SCREEN_MUSIC 沒列到的畫面（登入流程、載入中等）維持原本配樂不中斷 */
   if(Object.prototype.hasOwnProperty.call(SCREEN_MUSIC,id)) wantMusic(SCREEN_MUSIC[id]);
+  if(id==='scrTitle'){
+    taskReturnActive=false;
+  }
   if(id==='scrTitle'&&!LS.get('tutIntroAsked',false)){
     LS.set('tutIntroAsked',true);
     setTimeout(tutAskIntro,500);
@@ -6556,6 +6559,7 @@ $('#btnGoGacha').onclick=()=>openGacha('scrShop');
 $('#btnPull1').onclick=()=>askPull(1);
 $('#btnPull10').onclick=()=>askPull(10);
 function gachaBack(){
+  if(taskReturnGo()) return;
   sBack();
   if(gachaFrom==='scrTos'){ if(TOS){ tosRenderTeam(); tosRenderDuns(); } show('scrTos'); }
   else { renderShop(); show('scrShop'); }
@@ -6715,6 +6719,7 @@ function renderBagGear(){
       UPGRADES.length+' 項可長期受用的強化。</div>';
 }
 $('#btnBagBack').onclick=()=>{
+  if(taskReturnGo()) return;
   sBack();
   if(bagFrom==='scrShop'){ renderShop(); show('scrShop'); }
   else if(bagFrom==='scrTitle'){ show('scrTitle'); }
@@ -6958,7 +6963,7 @@ function fuseResult(win,got,target,refunded,focus){
 $('#btnCampaign').onclick=()=>{ sHotEnter(); vib(12); applyTheme('l0');
   if(!tierUnlocked(towerTier)) towerTier='explore';
   tierLoad(towerTier); paintTowerTier(); renderMap(); show('scrMap'); };
-$('#btnMapBack').onclick=()=>{ sBack(); show('scrTitle'); };
+$('#btnMapBack').onclick=()=>{ if(taskReturnGo())return; sBack(); show('scrTitle'); };
 $('#towerTierRow').addEventListener('click',e=>{
   const b=e.target.closest('.tr'); if(!b) return;
   const t=b.dataset.t;
@@ -8074,7 +8079,7 @@ function raidOpen(){ sFire&&sFire(); vib&&vib(12);
 }
 /* 多人副本的返回改回天眼副本樞紐，不要跳回主選單 —— 
    否則玩家從分頁進去、出來卻回到最外層，等於被踢出去。 */
-$('#btnRdBack').onclick=()=>{ sBack(); dunOpen('multi'); };
+$('#btnRdBack').onclick=()=>{ if(taskReturnGo())return; sBack(); dunOpen('multi'); };
 $('#rdRolePick').addEventListener('click',e=>{
   const b=e.target.closest('.rp'); if(!b) return;
   rdRole=b.dataset.r; sKey(4); vib(8);
@@ -9910,12 +9915,23 @@ const TUT_TOS_STEPS=[
 ];
 /* 每日任務點下去要跳到哪個畫面：直接借用遊戲原本開啟該畫面時會呼叫的準備函式，
    避免各自重寫一份、之後兩邊邏輯兜不起來。 */
+/* 每日任務點進某個畫面之後，那個畫面的返回鍵下一次應該要回任務列表，
+   而不是它原本寫死的目的地（例如背包平常返回是回世界對戰，但這裡要回任務）。
+   用一個一次性旗標處理：五個目標畫面的返回鍵開頭都先檢查這個旗標，
+   有的話就導回任務、把旗標清掉；沒有就照原本邏輯走，不影響平常的返回行為。 */
+let taskReturnActive=false;
+function taskReturnGo(){
+  if(!taskReturnActive) return false;
+  taskReturnActive=false;
+  sBack(); renderTasks(); show('scrTasks');
+  return true;
+}
 const TASK_NAV={
-  win:()=>{ renderMap(); show('scrMap'); },
-  tower:()=>{ if(!TOS) TOS=tosLoad(); tosHome(); },
-  raid:()=>{ raidOpen(); },
-  gacha:()=>{ applyTheme('l0'); renderGacha(); show('scrGacha'); },
-  break:()=>{ renderBag(); show('scrBag'); }
+  win:()=>{ taskReturnActive=true; renderMap(); show('scrMap'); },
+  tower:()=>{ taskReturnActive=true; if(!TOS) TOS=tosLoad(); tosHome(); },
+  raid:()=>{ taskReturnActive=true; raidOpen(); },
+  gacha:()=>{ taskReturnActive=true; applyTheme('l0'); renderGacha(); show('scrGacha'); },
+  break:()=>{ taskReturnActive=true; renderBag(); show('scrBag'); }
 };
 function renderTasks(){
   $('#tkList').innerHTML=tasks.list.map(t=>{
@@ -10659,7 +10675,7 @@ $('#btnTos').onclick=()=>{ sHotEnter(); vib(12); tosOrigin='scrTos';
   mountEye('#tosGachaEye','p7','tsgb','lite');
   show('scrTos'); };
 $('#btnTosGacha').onclick=()=>openGacha('scrTos');
-$('#btnTosBack').onclick=()=>{ sBack(); show('scrTitle'); };
+$('#btnTosBack').onclick=()=>{ if(taskReturnGo())return; sBack(); show('scrTitle'); };
 $('#btnPickBack').onclick=()=>{ sBack(); tosHome(); };
 $('#btnLadMode').onclick=()=>{
   ladderMode=!ladderMode; LS.set('ladm',ladderMode);
