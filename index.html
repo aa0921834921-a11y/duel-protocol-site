@@ -249,6 +249,16 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .vs-l,.vs-r{flex:1;font-family:var(--mono);font-size:10.5px;letter-spacing:1.4px}
 .vs-l{color:color-mix(in srgb,var(--foe) 55%,#fff)}.vs-r{color:#8AF0DF;text-align:right}
 .turnmsg{font-weight:700;font-size:13px;letter-spacing:2px;white-space:nowrap}
+.turntimer{display:flex;align-items:center;justify-content:center;gap:6px;margin:4px auto 0;
+  width:fit-content;padding:3px 12px;border-radius:12px;font-family:var(--mono);
+  font-size:11.5px;letter-spacing:1px;color:var(--dim);background:var(--panel);
+  border:1px solid var(--line);transition:.2s}
+.turntimer .ttdot{width:6px;height:6px;border-radius:50%;background:var(--me);flex-shrink:0}
+.turntimer.warn{color:var(--amb);border-color:rgba(255,197,61,.5)}
+.turntimer.warn .ttdot{background:var(--amb)}
+.turntimer.danger{color:var(--foe);border-color:rgba(255,59,87,.6);animation:ttpulse 1s infinite}
+.turntimer.danger .ttdot{background:var(--foe)}
+@keyframes ttpulse{0%,100%{opacity:1}50%{opacity:.5}}
 
 .battlelog{padding:10px 13px 11px}
 .log{margin-top:7px;max-height:210px;overflow-y:auto;font-family:var(--mono);font-size:14px;line-height:1.55;
@@ -1958,7 +1968,9 @@ body[data-phase="scrBoot"] #bootScene{display:block}
 .myhp.crit i{background:linear-gradient(90deg,#FF3B57,#FF2E9E);animation:caret .8s steps(2) infinite}
 .myhp span{position:absolute;right:6px;top:0;font-family:var(--mono);font-size:10px;color:#fff;
   text-shadow:0 0 4px #000}
-.skrow{display:flex;gap:5px;margin-top:8px}
+.skrow{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.skuses{width:100%;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--dim);
+  text-align:center;margin-bottom:5px}
 .sk{flex:1;padding:7px 2px;border-radius:9px;cursor:pointer;text-align:center;
   border:1px solid color-mix(in srgb,var(--cc) 50%,transparent);
   background:color-mix(in srgb,var(--cc) 14%,transparent);--cc:#8B8FB8;transition:.15s}
@@ -2261,21 +2273,24 @@ body[data-phase="scrBoot"] #bootScene{display:block}
   color:#F6F3EC;text-shadow:0 0 9px rgba(246,243,236,.75);background:none;padding:0;border:none;box-shadow:none;
   transform:translateX(1px)}
 .hv2-tb-slot{position:absolute;display:flex;align-items:center;pointer-events:none}
-.hv2-tb-slot-name{left:9.2%;top:31.8%;width:28.79%;height:18.75%;justify-content:center;text-align:center}
+.hv2-tb-slot-name{left:5.2%;top:33.0%;width:28.79%;height:18.75%;justify-content:center;text-align:center;
+  /* 透明度已調到最高，框幾乎看不出來；想找回明顯的深度感，把 .32/.75/.4 這三個透明度數字調高即可 */
+  background:rgba(0,0,0,.03);border-radius:4px;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.05),inset 0 0 0 1px rgba(130,95,55,.03);}
 .hv2-tb-slot-exp{left:20.1%;top:62.9%;width:15.5%;height:13.6%}
 .hv2-tb-name{font-family:var(--en);font-size:13px;font-weight:800;letter-spacing:1px;
   color:#F6F3EC;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  text-shadow:0 0 10px rgba(246,243,236,.6);transform:translate(-24%,10%)}
+  text-shadow:0 0 10px rgba(246,243,236,.6);width:100%;text-align:center}
 .hv2-tb-xp{position:relative;width:100%;height:13px;overflow:hidden;border-radius:2px;
-  background:rgba(0,0,0,.32)!important;margin:0!important;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.75),inset 0 0 0 1px rgba(130,95,55,.4);
+  background:rgba(0,0,0,.05)!important;margin:0!important;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.1),inset 0 0 0 1px rgba(130,95,55,.05);
   display:flex;align-items:center}
 .hv2-tb-xp i{display:block;height:100%;border-radius:2px;
-  background:linear-gradient(90deg,rgba(63,230,255,.5),rgba(63,230,255,.8))!important;
-  box-shadow:0 0 9px rgba(63,230,255,.5);mix-blend-mode:screen}
+  background:linear-gradient(90deg,rgba(255,180,40,.55),rgba(255,215,94,.85))!important;
+  box-shadow:0 0 9px rgba(255,215,94,.55);mix-blend-mode:screen}
 .hv2-tb-xp .xpnum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-family:var(--en);font-size:8.2px;font-weight:800;letter-spacing:.3px;
-  color:#eafffd;text-shadow:0 0 3px rgba(0,0,0,.9),0 0 5px rgba(63,230,255,.5);
+  color:#fff8ea;text-shadow:0 0 3px rgba(0,0,0,.9),0 0 5px rgba(255,215,94,.55);
   background:none;padding:0}
 .hv2-tb-portrait{position:absolute;left:42.95%;top:31%;width:13.63%;height:39.34%;
   border-radius:6px;overflow:hidden;pointer-events:none;
@@ -2283,15 +2298,15 @@ body[data-phase="scrBoot"] #bootScene{display:block}
 .hv2-tb-portrait .logo-eye{width:78%;height:78%}
 .hv2-tb-eye{position:absolute;left:45.76%;top:3.68%;width:7.95%;height:23.9%;
   cursor:pointer;background:transparent;border:none}
-.hv2-tb-slot-gold{left:58.5%;top:31.8%;width:28.79%;height:19.12%;justify-content:center;gap:6px}
-.hv2-tb-slot-shard{left:56.5%;top:61.76%;width:28.79%;height:13.6%;justify-content:center;gap:6px}
+.hv2-tb-slot-gold{left:62.8%;top:31.8%;width:20%;height:19.12%;justify-content:center;text-align:center;gap:6px}
+.hv2-tb-slot-shard{left:65%;top:61.76%;width:28.79%;height:13.6%;justify-content:center;text-align:center;gap:6px}
 .hv2-wallet{font-family:var(--en)!important;font-size:12px!important;font-weight:700;
   color:var(--gold,#FFD75E)!important;letter-spacing:.3px;white-space:nowrap;
   text-shadow:0 0 4px rgba(255,215,94,.4);background:none!important;
-  border:none!important;padding:0!important}
+  border:none!important;box-shadow:none!important;padding:0!important;width:100%;justify-content:center}
 .hv2-wallet b{font-family:var(--en)!important;font-size:12px!important;font-weight:700!important;
   color:var(--gold,#FFD75E)!important;text-shadow:0 0 4px rgba(255,215,94,.4)!important;
-  display:inline-block;min-width:34px;text-align:left}
+  display:inline-block;text-align:left}
 .hv2-shard{color:#3FE6FF!important;text-shadow:0 0 4px rgba(63,230,255,.5)!important}
 .hv2-shard b{color:#3FE6FF!important;text-shadow:0 0 4px rgba(63,230,255,.6)!important}
 .hv2-tb-set{position:absolute;left:87%;top:24%;width:12%;height:28%;
@@ -2830,6 +2845,7 @@ body[data-phase="scrBoot"] #bootScene{display:block}
     </div>
 
     <div class="vsbar"><div class="vs-l" id="obVsL">對手回合</div><div class="turnmsg" id="obTurnMsg">…</div><div class="vs-r">你的回合</div></div>
+    <div class="turntimer" id="obTurnTimer" hidden><span class="ttdot"></span><span id="obTurnTimerTxt">02:00</span></div>
 
     <div class="battlelog panel">
       <span class="ptitle">戰鬥紀錄 BATTLE LOG</span>
@@ -3178,6 +3194,7 @@ body[data-phase="scrBoot"] #bootScene{display:block}
     <div class="ladwrap">
       <div class="topbar">
         <div><div class="tt" id="lbTitle">排位對戰</div><div class="ts" id="lbSub">MIRROR RACE</div></div>
+        <div class="turntimer" id="lbMatchTimer" hidden><span class="ttdot"></span><span id="lbMatchTimerTxt">05:00</span></div>
         <button class="iconbtn" id="btnLbQuit" aria-label="放棄">✕</button>
       </div>
 
@@ -7131,6 +7148,13 @@ function obApply(C,m){
       obFlip(C);
       obU(C,'myScanRes', m.d, m.inc);
       return true; }
+    case 'pass': {
+      /* 對方那邊的倒數計時到了，主動放棄這一輪出手——不需要我方計算任何東西，
+         單純把回合交還過來，跟 guess/scan 一樣兩邊各自翻轉一次保持同步。 */
+      if(st.ph!=='battle'||st.over||st.turn!==peerR) return false;
+      obFlip(C);
+      obU(C,'theirPass');
+      return true; }
     case 'reveal':
       st.peerCode=m.code.slice(); obU(C,'reveal');
       return true;
@@ -7165,6 +7189,14 @@ function obActScan(C,d){
   if(st.myScanInfo.some(s=>s.d===d)) return false;
   st.myScan--; st.pendScan={d:d};
   obPost(C,{t:'scan', d:d});
+  return true;
+}
+function obActPass(C){
+  const st=C.st;
+  if(st.ph!=='battle'||st.over||st.turn!==C.role||st.pending||st.pendScan) return false;
+  obPost(C,{t:'pass'});
+  obFlip(C);
+  obU(C,'myPass');
   return true;
 }
 function obActRematch(C){
@@ -7362,7 +7394,7 @@ function obRenderAv(){ renderAvPicker('#obAvRow','#obPreview','avob'); }
 $('#btnOnline').onclick=()=>{ sHotEnter(); vib(12); obRenderAv();
   $('#obName').value=LS.get('name','')||'';
   mountEye('#obPreview',obAvatar,'op'); $('#obErr').textContent=''; show('scrOnline'); };
-$('#btnObBack').onclick=()=>{ if(taskReturnGo())return; sBack(); show('scrTitle'); };
+$('#btnObBack').onclick=()=>{ obTimerStop(); if(taskReturnGo())return; sBack(); show('scrTitle'); };
 /* 修正：這裡原本會 LS.set('name',n)，把好友對戰畫面「單場暫用」的暱稱欄位
    直接覆寫成帳號的正式暱稱（還會被 cloudPush 同步上雲端），導致玩家在這裡
    隨手改個字，離開重進、甚至登出登入後，帳號名稱都被換掉。
@@ -7532,8 +7564,42 @@ function obRow(name,color,g,A,B,isFoe){
   mountLog(obLogEl,el);
   return el;
 }
+let obTimerId=null, obTimerDeadline=0, obTimerLastMove=-1;
+const OB_TURN_MS=120000; /* 每輪 2 分鐘 */
+function obTimerStop(){
+  if(obTimerId){ clearInterval(obTimerId); obTimerId=null; }
+  const el=$('#obTurnTimer'); if(el) el.hidden=true;
+}
+function obTimerTick(){
+  const el=$('#obTurnTimer'), txt=$('#obTurnTimerTxt');
+  if(!OBC||OBC.st.over||OBC.st.ph!=='battle'){ obTimerStop(); return; }
+  const left=Math.max(0,obTimerDeadline-Date.now());
+  const s=Math.ceil(left/1000);
+  txt.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  el.classList.toggle('warn', s<=60&&s>30);
+  el.classList.toggle('danger', s<=30);
+  if(left<=0){
+    /* 時間到：如果現在輪到我，主動放棄這一輪；輪到對方的話等對方那邊自己逾時送出
+       pass 訊息，我方收到後 obPaintBattle 會自動重新同步計時器，這裡不用額外處理。 */
+    if(OBC.st.turn===OBC.role && !OBC.st.pending && !OBC.st.pendScan) obActPass(OBC);
+  }
+}
+function obTimerStart(){
+  obTimerDeadline=Date.now()+OB_TURN_MS;
+  const el=$('#obTurnTimer'); if(el) el.hidden=false;
+  if(obTimerId) clearInterval(obTimerId);
+  obTimerId=setInterval(obTimerTick,500);
+  obTimerTick();
+}
+/* 只有「真的換手了」（moveNo 變了）才重新起算 2 分鐘，避免同一輪畫面重繪
+   （例如切分頁回來、其他小更新）誤觸重置，讓玩家白白多拿時間。 */
+function obTimerSync(){
+  if(!OBC||OBC.st.over||OBC.st.ph!=='battle'){ obTimerStop(); return; }
+  if(OBC.st.moveNo!==obTimerLastMove){ obTimerLastMove=OBC.st.moveNo; obTimerStart(); }
+}
 function obPaintBattle(){
   if(!OBC) return;
+  obTimerSync();
   const st=OBC.st, myT=obMyTurn();
   paintCells(obEntryCellsEl,obEntry,!myT,obPin);
   paintUsed(obPadEl,obEntry);
@@ -7606,6 +7672,8 @@ function obBindUI(C){
       obSys(inc?('> 掃描結果：'+d+' 存在於對方密碼中！'):('> 掃描結果：'+d+' 不在對方密碼中'));
       obLastMyCount=obCountFrom(OBC.st.myHist,OBC.st.myScanInfo);
       inc?sGood(2):sMiss(); obPaintBattle(); },
+    myPass(){ obSys('> ⏱ 時間到，你放棄了這一輪出手'); sMiss(); obPaintBattle(); },
+    theirPass(){ obSys('> ⏱ 對方逾時，放棄了這一輪出手'); obPaintBattle(); },
     gameover(){ obGameOver(); },
     reveal(){ if(OBC&&OBC.st.over&&!overlay.hidden) obShowEnd(); },
     peerRematch(){ const b=$('#btnObAgain');
@@ -7626,6 +7694,7 @@ async function obStartBattle(){
   obEntry=[null,null,null,null]; obPin=[false,false,false,false]; obNotes.fill('none'); paintNotes(obPadEl,obNotes);
   obScanMode=false; obLogEl.innerHTML=''; obRow.n=0;
   obBestClueRow=null; obBestClueVal=0; obLastMyCount=5040;
+  obTimerLastMove=-1; obTimerStop();
   const pav=(OBC.peer&&OBC.peer.avatar in THEMES)?OBC.peer.avatar:'l0';
   applyTheme(pav);
   mountEye('#obEye',pav,'ob');
@@ -9041,6 +9110,7 @@ function ladStart(mode,picked){
   $('#lbLog').innerHTML='<div class="empty">雙方同時破解同一組密碼<br>先湊出 4A 者獲勝</div>';
   $('#lbHint').textContent='輸入 4 個不重複的數字';
   ladEntryPaint();
+  ladMatchTimerStart();
   sFire(); vib(12);
   show('scrLadBattle');
 }
@@ -9088,6 +9158,33 @@ function ladRace(myLeft,foeLeft,foeKnown){
 }
 /* 對手分析中的掃描串流。純視覺，不影響判定邏輯。 */
 let ladStreamIv=null;
+let ladMatchTimerId=null;
+const LAD_MATCH_MS=300000; /* 整場 5 分鐘，時間到還沒解出來就比誰的效率分較好 */
+function ladMatchTimerStop(){
+  if(ladMatchTimerId){ clearInterval(ladMatchTimerId); ladMatchTimerId=null; }
+  const el=$('#lbMatchTimer'); if(el) el.hidden=true;
+}
+function ladMatchTimerTick(){
+  const el=$('#lbMatchTimer'), txt=$('#lbMatchTimerTxt');
+  if(!LB||LB.over){ ladMatchTimerStop(); return; }
+  const left=Math.max(0,LB.startT+LAD_MATCH_MS-Date.now());
+  const s=Math.ceil(left/1000);
+  txt.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  el.classList.toggle('warn', s<=60&&s>20);
+  el.classList.toggle('danger', s<=20);
+  if(left<=0 && !LB.over){
+    /* 5 分鐘到了、雙方都還沒解出密碼：直接判定結束，交給 ladFinish 用效率分
+       （跟「同手數解出、比誰收斂得更緊」用的同一套邏輯）判斷誰的推理比較接近答案。 */
+    LB.over=true; ladStream(false); ladMatchTimerStop();
+    ladFinish(false,false);
+  }
+}
+function ladMatchTimerStart(){
+  const el=$('#lbMatchTimer'); if(el) el.hidden=false;
+  if(ladMatchTimerId) clearInterval(ladMatchTimerId);
+  ladMatchTimerId=setInterval(ladMatchTimerTick,500);
+  ladMatchTimerTick();
+}
 function ladStream(on){
   const el=$('#lbStream'); if(!el) return;
   clearInterval(ladStreamIv); ladStreamIv=null;
@@ -9177,6 +9274,7 @@ function ladSubmit(){
 }
 
 function ladFinish(myDone,foeDone){
+  ladMatchTimerStop();
   const myEff=effScore(LB.hist);
   const rt=!!(LB.rt&&RT);
   const foeEff=rt?RT.peer.eff:(LB.sol?LB.sol.eff:null);
@@ -9262,10 +9360,10 @@ $('#ladRanked').onclick=()=>{ sFire(); vib(12); mmStart(); };
 $('#btnMMCancel').onclick=()=>{ if(taskReturnGo())return; sBack(); mmStop(); arenaMMStop();
   arenaBack(); };
 $('#btnLbQuit').onclick=()=>{
-  if(!LB||LB.over){ arenaBack(); return; }
+  if(!LB||LB.over){ ladMatchTimerStop(); arenaBack(); return; }
   /* 中途放棄＝落敗。不做「領先就算贏」，那會變成領先方直接離開的漏洞。 */
   if(LB.mode!=='daily'){ applyResult(LB.foe,0,{n:LB.turn,e:effScore(LB.hist),quit:1,halfMul:LB.halfMul}); }
-  LB.over=true; ladStream(false); sMiss();
+  LB.over=true; ladStream(false); ladMatchTimerStop(); sMiss();
   arenaBack();
 };
 $('#btnLeAgain').onclick=()=>{ sFire(); vib(12); mmStart(); };
@@ -10953,6 +11051,11 @@ function tosStart(dun,isSquad){
   if(!S.n){ sMiss(); squadRun=false; return; }
   tosB={ dun, waveIx:-1, atk:S.atk, maxHp:S.hp, hp:S.hp, lead:S.lead, el:S.el,
     turn:0, entry:[null,null,null,null], pin:[false,false,false,false], pool:null, foe:null, log:[], effLog:[], sight:0, busy:false,
+    /* 平衡修正：主動技原本只有冷卻限制，沒有總量上限——湊 2、3 張帶技能的卡、
+       冷卻交錯開，幾乎能做到每回合都白拿一次免費資訊，跟世界對戰「資訊量有硬上限」
+       的能量制精神不一致。這裡加一個全隊共用、每場戰鬥固定的技能總次數（比照主線
+       深度掃描每場限 2～3 次的量級），逼玩家挑時機用，而不是無腦冷卻轉完就按。 */
+    skillUses:3, skillCap:3,
     cds:teamCards().map(x=>({ac:x.c.ac, c:x.c, left:0})), guard:false, burst:false };
   $('#tbDun').textContent=dun.nm;
   $('#tbWaves').textContent=dun.waves.length;
@@ -11079,11 +11182,14 @@ function tosPaint(){
   paintUsed(pad,B.entry);
   pad.querySelector('.exec').disabled=B.entry.some(v=>v==null);
   const sk=$('#tosSkills');
-  sk.innerHTML=B.cds.map((x,i)=>{
+  const usesLeft=B.skillUses||0;
+  sk.innerHTML='<div class="skuses">本場技能剩餘 '+usesLeft+'/'+(B.skillCap||3)+'</div>'+
+    B.cds.map((x,i)=>{
     const A=ACTIVES[x.ac];
-    return '<button class="sk'+(x.left<=0?' ready':'')+'" data-i="'+i+'"'+(x.left>0?' disabled':'')+
+    const locked=x.left>0||usesLeft<=0;
+    return '<button class="sk'+(!locked?' ready':'')+'" data-i="'+i+'"'+(locked?' disabled':'')+
       ' style="--cc:'+ELEMS[x.c.el].c+'"><div class="skn">'+A.nm+'</div>'+
-      '<div class="skc">'+(x.left>0?('CD '+x.left):'可用')+'</div></button>';
+      '<div class="skc">'+(x.left>0?('CD '+x.left):(usesLeft<=0?'次數已用完':'可用'))+'</div></button>';
   }).join('');
   sk.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>tosSkill(+b.dataset.i));
 }
@@ -11170,6 +11276,7 @@ function tosGuess(){
 function tosSkill(i){
   const B=tosB, x=B.cds[i];
   if(!x||x.left>0) return;
+  if((B.skillUses||0)<=0){ sMiss(); return; }
   const A=ACTIVES[x.ac];
   if(x.ac==='scan'){
     const d=Math.floor(Math.random()*10);
@@ -11183,7 +11290,7 @@ function tosSkill(i){
   } else if(x.ac==='guard'){ B.guard=true; tosSys('◇ '+x.c.nm+' 展開護壁，將擋下下一次攻擊'); }
   else if(x.ac==='burst'){ B.burst=true; tosSys('◇ '+x.c.nm+' 蓄力：下一手傷害 ×2'); }
   else if(x.ac==='sight'){ B.sight=3; tosSys('◇ '+x.c.nm+' 真視：顯示候選數，持續 3 回合'); }
-  x.left=A.cd; sScan(); vib([15,25,15]);
+  x.left=A.cd; B.skillUses--; sScan(); vib([15,25,15]);
   tosPaint();
 }
 function tosWin(){
