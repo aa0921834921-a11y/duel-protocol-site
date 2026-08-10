@@ -249,6 +249,7 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .vs-l,.vs-r{flex:1;font-family:var(--mono);font-size:10.5px;letter-spacing:1.4px}
 .vs-l{color:color-mix(in srgb,var(--foe) 55%,#fff)}.vs-r{color:#8AF0DF;text-align:right}
 .turnmsg{font-weight:700;font-size:13px;letter-spacing:2px;white-space:nowrap}
+/* 天梯整場倒數用的小徽章 */
 .turntimer{display:flex;align-items:center;justify-content:center;gap:6px;margin:4px auto 0;
   width:fit-content;padding:3px 12px;border-radius:12px;font-family:var(--mono);
   font-size:11.5px;letter-spacing:1px;color:var(--dim);background:var(--panel);
@@ -259,6 +260,18 @@ h1.big .t2{background:linear-gradient(92deg,var(--me),var(--me2));
 .turntimer.danger{color:var(--foe);border-color:rgba(255,59,87,.6);animation:ttpulse 1s infinite}
 .turntimer.danger .ttdot{background:var(--foe)}
 @keyframes ttpulse{0%,100%{opacity:1}50%{opacity:.5}}
+/* 好友對戰每輪倒數用的長條，跟 vsbar 同寬，填充色由 JS 連續漸變計算 */
+.turnbar{position:relative;width:100%;height:22px;margin-top:6px;border-radius:8px;
+  overflow:hidden;background:rgba(0,0,0,.35);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.7),inset 0 0 0 1px rgba(130,95,55,.35)}
+.turnbar-fill{position:absolute;left:0;top:0;bottom:0;width:100%;
+  background:var(--grn);transition:width .4s linear,background-color .4s linear;
+  box-shadow:0 0 12px currentColor}
+.turnbar-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:1.5px;color:#fff;
+  text-shadow:0 0 3px rgba(0,0,0,.9),0 0 6px rgba(0,0,0,.6)}
+.turnbar.pulse .turnbar-fill{animation:tbpulse 1s infinite}
+@keyframes tbpulse{0%,100%{opacity:1}50%{opacity:.55}}
 
 .battlelog{padding:10px 13px 11px}
 .log{margin-top:7px;max-height:210px;overflow-y:auto;font-family:var(--mono);font-size:14px;line-height:1.55;
@@ -2845,7 +2858,10 @@ body[data-phase="scrBoot"] #bootScene{display:block}
     </div>
 
     <div class="vsbar"><div class="vs-l" id="obVsL">對手回合</div><div class="turnmsg" id="obTurnMsg">…</div><div class="vs-r">你的回合</div></div>
-    <div class="turntimer" id="obTurnTimer" hidden><span class="ttdot"></span><span id="obTurnTimerTxt">02:00</span></div>
+    <div class="turnbar" id="obTurnTimer" hidden>
+      <div class="turnbar-fill" id="obTurnBarFill"></div>
+      <div class="turnbar-txt" id="obTurnTimerTxt">02:00</div>
+    </div>
 
     <div class="battlelog panel">
       <span class="ptitle">戰鬥紀錄 BATTLE LOG</span>
@@ -7566,18 +7582,41 @@ function obRow(name,color,g,A,B,isFoe){
 }
 let obTimerId=null, obTimerDeadline=0, obTimerLastMove=-1;
 const OB_TURN_MS=120000; /* 每輪 2 分鐘 */
+const OB_WARN_S=60, OB_DANGER_S=30; /* 剩幾秒變黃／變紅，跟 OB_TURN_MS 分開放，測試版可以只縮短前者 */
 function obTimerStop(){
   if(obTimerId){ clearInterval(obTimerId); obTimerId=null; }
   const el=$('#obTurnTimer'); if(el) el.hidden=true;
 }
+/* 顏色錨點：滿血綠 → 剩 OB_WARN_S 秒時是黃 → 剩 OB_DANGER_S 秒時是紅，
+   兩個區間之間用 RGB 線性插值連續過渡，不是三種顏色說切就切。 */
+const OB_C_GREEN=[70,255,158], OB_C_AMBER=[255,197,61], OB_C_RED=[255,59,87];
+function obLerpRGB(a,b,t){
+  return [Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t)];
+}
+function obTimerColor(s){
+  if(s>=OB_WARN_S){
+    const span=(OB_TURN_MS/1000)-OB_WARN_S;
+    const t=span>0?(s-OB_WARN_S)/span:1;
+    return obLerpRGB(OB_C_AMBER,OB_C_GREEN,Math.max(0,Math.min(1,t)));
+  } else if(s>=OB_DANGER_S){
+    const span=OB_WARN_S-OB_DANGER_S;
+    const t=span>0?(s-OB_DANGER_S)/span:1;
+    return obLerpRGB(OB_C_RED,OB_C_AMBER,Math.max(0,Math.min(1,t)));
+  }
+  return OB_C_RED;
+}
 function obTimerTick(){
-  const el=$('#obTurnTimer'), txt=$('#obTurnTimerTxt');
+  const el=$('#obTurnTimer'), txt=$('#obTurnTimerTxt'), fill=$('#obTurnBarFill');
   if(!OBC||OBC.st.over||OBC.st.ph!=='battle'){ obTimerStop(); return; }
   const left=Math.max(0,obTimerDeadline-Date.now());
   const s=Math.ceil(left/1000);
   txt.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-  el.classList.toggle('warn', s<=60&&s>30);
-  el.classList.toggle('danger', s<=30);
+  const pct=Math.max(0,Math.min(100,(left/OB_TURN_MS)*100));
+  const [r,g,b]=obTimerColor(left/1000);
+  fill.style.width=pct+'%';
+  fill.style.backgroundColor='rgb('+r+','+g+','+b+')';
+  fill.style.color='rgb('+r+','+g+','+b+')'; /* box-shadow 用 currentColor 帶光暈 */
+  el.classList.toggle('pulse', s<=10);
   if(left<=0){
     /* 時間到：如果現在輪到我，主動放棄這一輪；輪到對方的話等對方那邊自己逾時送出
        pass 訊息，我方收到後 obPaintBattle 會自動重新同步計時器，這裡不用額外處理。 */
@@ -9160,6 +9199,7 @@ function ladRace(myLeft,foeLeft,foeKnown){
 let ladStreamIv=null;
 let ladMatchTimerId=null;
 const LAD_MATCH_MS=300000; /* 整場 5 分鐘，時間到還沒解出來就比誰的效率分較好 */
+const LAD_WARN_S=60, LAD_DANGER_S=20;
 function ladMatchTimerStop(){
   if(ladMatchTimerId){ clearInterval(ladMatchTimerId); ladMatchTimerId=null; }
   const el=$('#lbMatchTimer'); if(el) el.hidden=true;
@@ -9170,8 +9210,8 @@ function ladMatchTimerTick(){
   const left=Math.max(0,LB.startT+LAD_MATCH_MS-Date.now());
   const s=Math.ceil(left/1000);
   txt.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-  el.classList.toggle('warn', s<=60&&s>20);
-  el.classList.toggle('danger', s<=20);
+  el.classList.toggle('warn', s<=LAD_WARN_S&&s>LAD_DANGER_S);
+  el.classList.toggle('danger', s<=LAD_DANGER_S);
   if(left<=0 && !LB.over){
     /* 5 分鐘到了、雙方都還沒解出密碼：直接判定結束，交給 ladFinish 用效率分
        （跟「同手數解出、比誰收斂得更緊」用的同一套邏輯）判斷誰的推理比較接近答案。 */
