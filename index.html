@@ -10039,13 +10039,25 @@ function ladderFloor(){
   const rk=rankOf(ladder.r);
   return Math.max(ladder.floor, rk.min);
 }
+/* 單場分數變動上限：段位間距窄的地方（例如高段每階只差150分），
+   Glicko-2 在 rd 還很高時單場波動可能上百分，會一場跳過好幾個段位，
+   高段的段位感會被削弱。這裡把單場變動幅度鎖在「目前段位寬度」的一半內，
+   段位間距寬的地方（例如精鋼那 1300 分區間）波動可以大，窄的地方波動自動變小。 */
+function ladderMaxSwing(atR){
+  const rk=rankOf(atR), idx=RANKS.indexOf(rk);
+  const lo=rk.min, hi=RANKS[idx+1]?RANKS[idx+1].min:(rk.min+300);
+  return Math.max(40,Math.round((hi-lo)*.5));
+}
 function applyResult(foe,score,detail){
   const before=ladder.r, fl=ladderFloor();
   const out=g2(ladder.r,ladder.rd,ladder.vol,foe.r,60,score);
   /* halfMul：真人配對逾時、改打標準對手時的懲罰——
      只減半「這次分數移動了多少」，RD/vol 該怎麼收斂還是照 Glicko-2 正常算，
      否則玩家會發現一直打標準對手可以刷出異常穩定的分數不確定度。 */
-  const rNew=(detail&&detail.halfMul)?(before+arenaHalfDelta(out.r-before)):out.r;
+  const rawDelta=out.r-before;
+  const cap=ladderMaxSwing(before);
+  const cappedDelta=Math.max(-cap,Math.min(cap,rawDelta));
+  const rNew=(detail&&detail.halfMul)?(before+arenaHalfDelta(cappedDelta)):(before+cappedDelta);
   ladder.r=Math.max(fl,rNew);
   ladder.rd=out.rd; ladder.vol=out.vol;
   ladder.peak=Math.max(ladder.peak,ladder.r);
@@ -11615,6 +11627,7 @@ function tosSkill(i){
 }
 function tosWin(){
   const B=tosB, d=B.dun;
+  taskProgress('raid',1);
   if(squadRun){
     /* 戰隊挑戰只計成績，不給掉落與經驗——否則它會變成刷素材的最佳路徑，
        蓋掉一般副本的存在意義。 */
@@ -11662,6 +11675,7 @@ function tosWin(){
 }
 function tosLose(){
   const B=tosB;
+  taskProgress('raid',1);
   sLose(); vib([70,90,70]);
   card.innerHTML='<div class="status no">/// DEFEAT ///</div><h2>隊伍全滅</h2>'+
     '<p class="desc">撐到第 '+(B.waveIx+1)+' 波。<br>試試<b>換屬性克制的隊伍</b>、把卡片練高，或更謹慎地推理。</p>'+
